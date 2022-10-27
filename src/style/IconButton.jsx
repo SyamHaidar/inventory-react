@@ -25,15 +25,6 @@ const IconButton = styled(Style)`
             box-shadow: ${theme.color.shadow.button.brand};
           }
         `
-      case 'primary':
-        return css`
-          background-color: ${theme.color.primary.main};
-          color: ${theme.color.text.contrast};
-          border: 1px solid ${theme.color.primary.main};
-          &:hover {
-            box-shadow: ${theme.color.shadow.button.brand.primary};
-          }
-        `
       case 'light':
         return css`
           background-color: ${theme.color.light};
@@ -41,13 +32,18 @@ const IconButton = styled(Style)`
         `
       case 'outline':
         return css`
-          /* background-color: ${theme.color.canvas}; */
           border: 1px solid ${theme.color.border};
+          color: ${(props) => props.$color};
+          &:hover {
+            border: 1px solid ${(props) => props.$color || `${theme.color.boder}`};
+            background-color: ${(props) => props.$color + 14 || `${theme.color.light}99`};
+          }
         `
       default:
         return css`
+          color: ${(props) => props.$color};
           &:hover {
-            background-color: ${theme.color.light};
+            background-color: ${(props) => props.$color + 14 || `${theme.color.light}99`};
           }
         `
     }
@@ -82,9 +78,18 @@ const IconButton = styled(Style)`
 
 // ----------------------------------------------------------------------
 
-export default function IconButtonStyle({ children, icon, iconSize, variant, size, sx, ...other }) {
+export default function IconButtonStyle({
+  children,
+  icon,
+  iconSize,
+  variant,
+  size,
+  color,
+  sx,
+  ...other
+}) {
   return (
-    <IconButton as="button" $variant={variant} $size={size} $sx={sx} {...other}>
+    <IconButton as="button" $variant={variant} $size={size} $color={color} $sx={sx} {...other}>
       {icon && <SvgIconStyle icon={icon} size={size === 'small' ? '16' : iconSize} />}
       {children}
     </IconButton>

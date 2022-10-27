@@ -20,7 +20,11 @@ export default function Overlay({ children, open }) {
       >
         <Box
           onClick={open}
-          sx={{ position: 'fixed', backgroundColor: theme.color.overlay, inset: 0 }}
+          sx={{
+            position: 'fixed',
+            backgroundColor: theme.color.overlay,
+            inset: 0,
+          }}
         />
         {children}
       </Box>

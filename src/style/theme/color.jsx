@@ -1,11 +1,9 @@
 const BRAND = {
-  main: '#FF731D',
-}
-
-const PRIMARY = {
-  light: '#e1e1e1',
-  main: '#040303',
-  dark: '#020101',
+  main: '#FA4EAB',
+  // main: '#F94892',
+  // main: '#FF9F29',
+  // main: '#1257ed',
+  // main: '#0021ED',
 }
 
 const BLUE = {
@@ -52,32 +50,32 @@ const TEXT_LIGHT = {
   primary: '#212B36',
   secondary: '#637381',
   disabled: '#919EAB',
-  contrast: '#fff',
+  contrast: '#ffffff',
 }
 
 const TEXT_DARK = {
   primary: '#f5f7fe',
   secondary: '#637381',
   disabled: '#212B36',
-  contrast: '#fff',
+  contrast: '#ffffff',
+}
+
+const SHADOW = {
+  button: {
+    brand: `0px 8px 16px 0px  ${BRAND.main}40`,
+  },
 }
 
 const SHADOW_LIGHT = {
   main: '0 0 2px rgba(145, 158, 171, 0.20), 0 12px 24px -4px rgba(145, 158, 171, 0.12)',
   top: '0 0 2px rgba(145, 158, 171, 0.20), 0 12px 24px -4px rgba(145, 158, 171, 0.12)',
-  button: {
-    brand: `0px 8px 16px 0px  ${BRAND.main}40`,
-    primary: `0px 8px 16px 0px ${PRIMARY.main}40`,
-  },
+  ...SHADOW,
 }
 
 const SHADOW_DARK = {
-  main: '0 0 2px rgba(0, 0, 0, 0.20) , 0 12px 24px -4px rgba(0, 0, 0, 0.12)',
-  top: '0 0 2px rgba(0, 0, 0, 0.20) , 0 -12px 24px -4px rgba(0, 0, 0, 0.12)',
-  button: {
-    brand: `0px 8px 16px 0px ${BRAND.main}40`,
-    primary: `0px 8px 16px 0px ${PRIMARY.main}40`,
-  },
+  main: '0 0 2px rgba(0, 0, 0, 0.24) , 0 12px 24px -4px rgba(0, 0, 0, 0.24)',
+  top: '0 0 2px rgba(0, 0, 0, 0.24) , 0 -12px 24px -4px rgba(0, 0, 0, 0.24)',
+  ...SHADOW,
 }
 
 const light = {
@@ -85,8 +83,8 @@ const light = {
   blur: '#ffffffa6',
   canvas: '#ffffff',
   overlay: '#07080ccc',
-  scrollbar: '#b4bcc3',
-  border: '#dee7f4',
+  scrollbar: '#b6b7ba',
+  border: '#dedfe2',
   contrast: '#16171a',
   paper: '#ffffff',
   text: { ...TEXT_LIGHT },
@@ -94,28 +92,39 @@ const light = {
 }
 
 const dark = {
-  light: '#2a2b2e',
-  blur: '#16171aa6',
-  canvas: '#16171a',
+  light: '#202124',
+  blur: '#000000a6',
+  canvas: '#000000',
   overlay: '#07080ccc',
-  scrollbar: '#3c444b',
-  border: '#343538',
-  contrast: '#fff',
-  paper: '#202124',
+  scrollbar: '#3e3f42',
+  border: '#2a2b2e',
+  contrast: '#ffffff',
+  paper: '#16171a',
   text: { ...TEXT_DARK },
   shadow: { ...SHADOW_DARK },
 }
 
-const color = {
-  brand: { ...BRAND },
-  primary: { ...PRIMARY },
-  blue: { ...BLUE },
-  cyan: { ...CYAN },
-  green: { ...GREEN },
-  yellow: { ...YELLOW },
-  red: { ...RED },
-  ...dark,
-  // ...light,
-}
+const theme = localStorage.getItem('theme')
+
+const color =
+  theme === 'dark'
+    ? {
+        brand: { ...BRAND },
+        blue: { ...BLUE },
+        cyan: { ...CYAN },
+        green: { ...GREEN },
+        yellow: { ...YELLOW },
+        red: { ...RED },
+        ...dark,
+      }
+    : {
+        brand: { ...BRAND },
+        blue: { ...BLUE },
+        cyan: { ...CYAN },
+        green: { ...GREEN },
+        yellow: { ...YELLOW },
+        red: { ...RED },
+        ...light,
+      }
 
 export default color

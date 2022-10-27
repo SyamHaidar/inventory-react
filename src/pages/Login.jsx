@@ -1,118 +1,108 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-// data
-import Admin from '../data/Admin'
+import { Navigate, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 // style
-import { Box, Button, Divider, Stack, TextField, theme, Typography } from '../style'
+import { Box, Button, Divider, Grid, Stack, TextField, theme, Typography } from '../style'
 // component
 import { Footer, Logo, Page } from '../components'
+import { authSignin } from '../redux/actions/authAction'
 
 // -----------------------------------------------------------------------------
 
 export default function Login() {
+  const { auth } = useSelector((state) => state.auth)
+  const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
+  const [body, setBody] = useState({ username: '', password: '' })
 
-  const loginHandle = !email || password.length < 6
+  const handleLoginButton = !body.username || body.password.length < 6
 
-  const onLogin = () => {
-    if (email === Admin.email && password === Admin.password) {
-      console.log('login')
-      navigate('/dashboard')
-    } else {
-      setMessage('Incorrect email or password.')
-    }
+  // handle change body
+  const handleChange = (e) => {
+    setBody({ ...body, [e.target.name]: e.target.value })
   }
 
-  return (
-    <Page title="Login &ndash; ">
-      <Stack direction="row" spacing={-80} sx={{ backgroundColor: theme.color.light }}>
+  const handleLogin = () => {
+    dispatch(authSignin({ body, navigate }))
+  }
+
+  console.log(auth)
+
+  return auth ? (
+    <Navigate to="/dashboard" replace={true} />
+  ) : (
+    <Page title="Welcome -">
+      <Grid>
         <Stack
           direction="column"
           justify="center"
           items="center"
-          sx={{
-            textAlign: 'center',
-            margin: '0 32px',
-            minHeight: '100vh',
-            zIndex: 1,
-            '@media (max-width: 768px)': {
-              width: '100%',
-              margin: '0',
-            },
-          }}
+          sx={{ textAlign: 'center', minHeight: '100vh' }}
         >
           <Stack
             direction="column"
             sx={{
-              padding: '24px',
               height: '100%',
               width: '100%',
-              margin: '0',
+              padding: '52px 32px 0px',
               backgroundColor: theme.color.canvas,
-              boxShadow: theme.color.shadow.main,
-              '@media (min-width: 576px)': {
-                padding: '24px 80px',
-              },
-              '@media (min-width: 768px)': {
-                borderRadius: theme.size.rounded.main,
-                width: '600px',
-                margin: '16px 0',
-                padding: '40px 40px 16px',
+              '@media (min-width: 992px)': {
+                padding: '52px 80px 0px',
               },
             }}
           >
             <Stack direction="column" spacing={32} sx={{ flex: 'auto' }}>
               <Stack direction="column" spacing={24}>
-                <Logo height={40} sx />
-                <Box>
+                <Logo height={40} />
+                <Stack direction="column" spacing={4}>
                   <Typography
                     as="h2"
-                    text="Sig in to WGS"
+                    text="Welcome Back"
                     size={24}
                     weight="500"
                     variant="primary"
                   />
-                  <Typography as="span" text="Enter your details below." />
-                </Box>
+                  <Typography as="span" text="Sign in to continue to Waku!" />
+                </Stack>
               </Stack>
 
               {message && <Typography text={message} sx={{ color: theme.color.red.main }} />}
 
               <Stack direction="column" spacing={20}>
                 <TextField
-                  label="Email address"
-                  type="email"
+                  label="Username"
+                  type="text"
+                  name="username"
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={body.username}
+                  onChange={handleChange}
                 />
                 <TextField
                   label="Password"
                   type="password"
+                  name="password"
                   required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={body.password}
+                  onChange={handleChange}
                 />
               </Stack>
 
               <Button
                 type="submit"
-                onClick={onLogin}
-                disabled={loginHandle}
+                onClick={handleLogin}
+                disabled={handleLoginButton}
                 text="Sign in"
                 variant="brand"
-                height="medium"
-                width="full"
+                size="medium"
+                width
               />
 
               <Divider text="OR" />
 
               <Stack direction="column" spacing={16}>
-                <Button text="Login with Google" variant="outline" height="medium" width="full" />
+                <Button text="Login with Google" variant="outline" size="medium" width />
               </Stack>
             </Stack>
 
@@ -121,9 +111,8 @@ export default function Login() {
         </Stack>
         <Box
           sx={{
-            height: '100vh',
-            width: '100%',
-            padding: '32px',
+            height: '100%',
+            padding: '16px',
             '@media (max-width: 768px)': {
               display: 'none',
             },
@@ -131,15 +120,15 @@ export default function Login() {
         >
           <Box
             sx={{
-              background: 'url(https://www.wgshub.com/assets/topbanner-about.png) no-repeat',
+              background: 'url(/static/covers/cover_default.jpg) no-repeat',
               backgroundSize: 'cover',
-              height: '100%',
-              width: '100%',
+              backgroundPosition: 'center',
               borderRadius: theme.size.rounded.main,
+              height: '100%',
             }}
           />
         </Box>
-      </Stack>
+      </Grid>
     </Page>
   )
 }

@@ -10,7 +10,6 @@ export default function Page({ children, title = '' }) {
       <Helmet>
         <title>{`${title} MyInven.io`}</title>
       </Helmet>
-
       <Box>{children}</Box>
     </>
   )

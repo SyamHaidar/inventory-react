@@ -1,9 +1,13 @@
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components/macro'
 // component
 import { Overlay } from '../../components'
 // style
 import { Avatar, Box, Button, Modal, Stack, theme, Typography } from '../../style'
+// redux action
+import { authSignout } from '../../redux/actions/authAction'
+import { Link } from 'react-router-dom'
 
 // ----------------------------------------------------------------------
 
@@ -42,10 +46,20 @@ const Wrapper = styled.div`
   }
 `
 
+const PictureWrapper = styled.div`
+  border-radius: ${theme.size.rounded.full};
+  border: 1.5px dashed ${theme.color.border};
+  padding: 8px;
+`
+
 // ----------------------------------------------------------------------
 
 export default function NavAccount() {
+  const user = useSelector((state) => state.auth.user)
+  const dispatch = useDispatch()
+
   const [open, setOpen] = useState(false)
+  const isOpen = () => setOpen(!open)
 
   return (
     <>
@@ -57,26 +71,26 @@ export default function NavAccount() {
         <Wrapper>
           <Avatar
             size={40}
-            src={'/static/avatars/avatar_default.png'}
-            alt={`Anya's profile picture`}
+            src={'/static/avatars/avatar_default.jpg'}
+            alt={`${user.fullName}'s profile picture`}
           />
         </Wrapper>
       </Stack>
 
       {open && (
         <Overlay open={() => setOpen(false)}>
-          <Modal sx={{ padding: '24px' }}>
+          <Modal sx={{ padding: '52px 24px 24px' }}>
             <Stack direction="column" items="center">
-              <Wrapper className="profile">
+              <PictureWrapper>
                 <Avatar
-                  src={'/static/avatars/avatar_default.png'}
-                  alt={`Anya's profile picture`}
+                  src={'/static/avatars/avatar_default.jpg'}
+                  alt={`${user.fullName}'s profile picture`}
                   size={128}
                 />
-              </Wrapper>
+              </PictureWrapper>
               <Box sx={{ marginTop: '16px', textAlign: 'center' }}>
-                <Typography as="h3" text="Anya Forger" size={20} weight="700" variant="primary" />
-                <Typography text="Super Admin" size={14} />
+                <Typography as="h3" text={user.fullName} size={20} weight="700" variant="primary" />
+                <Typography text={user.role.name} size={14} />
               </Box>
             </Stack>
 
@@ -87,14 +101,26 @@ export default function NavAccount() {
               spacing={12}
               sx={{ marginTop: '32px' }}
             >
-              <Button text="Logout" variant="light" height="medium" width="full" />
               <Button
-                onClick={() => setOpen(false)}
-                text="Cancel"
+                onClick={isOpen}
+                as={Link}
+                to={`/dashboard/user/@${user.username}`}
+                text="Profile"
                 variant="outline"
-                height="medium"
-                width="full"
+                size="medium"
+                width
               />
+              <Button
+                onClick={() => {
+                  isOpen()
+                  dispatch(authSignout())
+                }}
+                text="Logout"
+                variant="outline"
+                size="medium"
+                width
+              />
+              <Button onClick={isOpen} text="Cancel" variant="outline" size="medium" width />
             </Stack>
           </Modal>
         </Overlay>

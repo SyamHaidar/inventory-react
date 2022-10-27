@@ -2,11 +2,12 @@ import { Link } from 'react-router-dom'
 // style
 import { Box, Stack, Sticky, theme } from '../../style'
 // component
-import { Logo } from '../../components'
+import { Logo, Scrollbar } from '../../components'
 //
 import NavSection from './NavSection'
 import NavAccount from './NavAccount'
-import MenuSection from './MenuSection'
+import AddButton from './AddButton'
+import NavSectionMobile from './NavSectionMobile'
 
 // ----------------------------------------------------------------------
 
@@ -15,36 +16,39 @@ export default function DashboardDrawer() {
     <>
       <Box
         sx={{
-          display: 'none',
+          display: 'block',
           minHeight: '100vh',
           width: '80px',
           backgroundColor: theme.color.canvas,
-          borderRight: `1px solid ${theme.color.border}`,
-          zIndex: 20,
-          '@media (min-width: 576px)': {
-            display: 'block',
-          },
+          zIndex: 2,
+          // '@media (min-width: 576px)': {
+          //   display: 'block',
+          // },
         }}
       >
         <Sticky sx={{ top: 0 }}>
-          <Stack direction="column" sx={{ height: '100vh' }}>
-            <Stack as={Link} to={'/dashboard'} justify="center" sx={{ padding: '24px 0 32px' }}>
-              <Logo />
+          <Stack
+            direction="column"
+            justify="space-between"
+            sx={{ height: '100vh', borderRight: `1px dashed ${theme.color.border}` }}
+          >
+            <Stack direction="column" sx={{ height: '100vh' }}>
+              <Stack as={Link} to={'/dashboard'} justify="center" sx={{ padding: '24px 0' }}>
+                <Logo />
+              </Stack>
+              <Stack direction="column" items="center" spacing={8}>
+                <NavSection />
+              </Stack>
             </Stack>
-            <Stack direction="column" spacing={8} sx={{ flex: 'auto' }}>
-              <NavSection />
-            </Stack>
-            <Stack direction="column" spacing={8}>
-              <MenuSection />
-            </Stack>
-            <Stack justify="center" sx={{ padding: '32px 0 24px' }}>
+            <Stack direction="column" items="center" spacing={16} sx={{ padding: '24px 0' }}>
+              <AddButton />
               <NavAccount />
             </Stack>
           </Stack>
         </Sticky>
       </Box>
 
-      <Box
+      {/* <Box
         sx={{
           position: 'fixed',
           bottom: 0,
@@ -62,9 +66,9 @@ export default function DashboardDrawer() {
         }}
       >
         <Stack direction="row" justify="space-around" items="center">
-          <NavSection />
+          <NavSectionMobile />
         </Stack>
-      </Box>
+      </Box> */}
     </>
   )
 }

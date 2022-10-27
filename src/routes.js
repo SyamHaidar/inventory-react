@@ -2,7 +2,7 @@ import { useRoutes } from 'react-router-dom'
 // layout
 import DashboardLayout from './layouts/dashboard'
 // page
-import Dashboard from './pages/dashboard/Dahsboard'
+import Dashboard from './pages/dashboard/Dashboard'
 import Product from './pages/dashboard/Product'
 import ProductDetail from './pages/dashboard/product/ProductDetail'
 import Order from './pages/dashboard/Order'
@@ -11,19 +11,19 @@ import Supplier from './pages/dashboard/Supplier'
 import SupplierDetail from './pages/dashboard/supplier/SupplierDetail'
 import User from './pages/dashboard/User'
 import UserDetail from './pages/dashboard/user/UserDetail'
+import UserEdit from './pages/dashboard/user/UserEdit'
+import Notification from './pages/dashboard/Notification'
 //
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
+import SupplierEdit from './pages/dashboard/supplier/SupplierEdit'
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
   return useRoutes([
-    // 404
     { path: '*', element: <NotFound /> },
-    // login
     { path: '/', element: <Login /> },
-    // main
     {
       path: '/dashboard',
       element: <DashboardLayout />,
@@ -33,31 +33,33 @@ export default function Router() {
           path: 'product',
           children: [
             { index: true, element: <Product /> },
-            // { path: 'detail', element: <ProductDetail /> },
-            { path: ':id', element: <ProductDetail /> },
+            { path: ':name', element: <ProductDetail /> },
           ],
         },
         {
           path: 'order',
           children: [
             { index: true, element: <Order /> },
-            { path: 'detail', element: <OrderDetail /> },
+            { path: 'invoice/:invoice', element: <OrderDetail /> },
           ],
         },
         {
           path: 'supplier',
           children: [
             { index: true, element: <Supplier /> },
-            { path: 'detail', element: <SupplierDetail /> },
+            { path: ':name', element: <SupplierDetail /> },
+            { path: ':id/edit', element: <SupplierEdit /> },
           ],
         },
         {
           path: 'user',
           children: [
             { index: true, element: <User /> },
-            { path: 'detail', element: <UserDetail /> },
+            { path: '@:username', element: <UserDetail /> },
+            { path: ':id/edit', element: <UserEdit /> },
           ],
         },
+        { path: 'notification', element: <Notification /> },
       ],
     },
   ])

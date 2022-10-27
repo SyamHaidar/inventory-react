@@ -10,9 +10,9 @@ export default function Container({ children, sx }) {
         display: 'block',
         width: '100%',
         padding: '0 16px',
-        '@media (min-width: 576px)': {
-          padding: '0 32px',
-        },
+        // '@media (min-width: 576px)': {
+        //   padding: '0 32px',
+        // },
         ...sx,
       }}
     >

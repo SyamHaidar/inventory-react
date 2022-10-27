@@ -18,7 +18,7 @@ const SvgIcon = styled.span`
         `
       case 'primary':
         return css`
-          background-color: ${theme.color.text.main};
+          background-color: ${theme.color.text.primary};
         `
       default:
         return css`

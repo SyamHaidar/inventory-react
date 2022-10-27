@@ -6,7 +6,7 @@ import theme from './theme'
 // ----------------------------------------------------------------------
 
 const Modal = styled(Style)`
-  background: ${theme.color.canvas};
+  background: ${theme.color.paper};
   position: fixed;
   overflow: hidden;
 
@@ -17,6 +17,8 @@ const Modal = styled(Style)`
         return css`
           bottom: 0;
           width: 100%;
+          max-width: ${(props) => props.$width || '640px'};
+          max-height: calc(100vh - 40px);
           border-top-left-radius: ${theme.size.rounded.main};
           border-top-right-radius: ${theme.size.rounded.main};
           animation: ${AnimateModalBottom} 0.15s ease-out;
@@ -24,7 +26,6 @@ const Modal = styled(Style)`
 
           /* Small screen <= 576px */
           @media (max-width: 576px) {
-            height: calc(100vh - 40px);
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
           }
@@ -32,6 +33,7 @@ const Modal = styled(Style)`
       default:
         return css`
           width: ${(props) => props.$width || '360px'};
+          max-height: calc(100vh - 40px);
           border-radius: ${theme.size.rounded.main};
           animation: ${AnimateModal} 0.15s ease-out;
           box-shadow: ${theme.color.shadow.main};

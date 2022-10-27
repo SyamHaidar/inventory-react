@@ -11,8 +11,6 @@ import {
 } from '../../../style'
 // component
 import { Scrollbar, TableListHead } from '../../../components'
-// data
-import { UserActivity } from '../../../data'
 
 // ----------------------------------------------------------------------
 
@@ -25,7 +23,7 @@ export default function UserListActivity() {
         <Table>
           <TableListHead label={TABLE_HEAD} />
           <TableBody>
-            {UserActivity.map((item, index) => (
+            {/* {UserActivity.map((item, index) => (
               <TableRow hover key={index}>
                 <TableCell padding="checkbox">
                   <Checkbox />
@@ -35,7 +33,7 @@ export default function UserListActivity() {
                 </TableCell>
                 <TableCell>{item.date}</TableCell>
               </TableRow>
-            ))}
+            ))} */}
           </TableBody>
         </Table>
       </Scrollbar>

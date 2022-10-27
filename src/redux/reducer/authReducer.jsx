@@ -1,26 +1,38 @@
-const initialState = {
-  authChecked: false,
-  loggedIn: false,
-  currentUser: {},
-}
+import { createSlice } from '@reduxjs/toolkit'
+import { authCheck, authSignin, authSignout } from '../actions/authAction'
 
 // -------------------------------------------------------------------------
 
-export default function authReducer(state = initialState, action) {
-  switch (action.type) {
-    case 'AUTH':
-      return {
-        authChecked: true,
-        loggedIn: true,
-        currentUser: action.payload,
-      }
-    case 'NOT_AUTH':
-      return {
-        authChecked: true,
-        loggedIn: false,
-        currentUser: {},
-      }
-    default:
-      return state
-  }
-}
+const authReducer = createSlice({
+  name: 'auth',
+  initialState: {
+    user: '',
+    auth: '',
+    loading: true,
+  },
+  reducers: {},
+  extraReducers: {
+    // ---------- auth check ----------
+    [authCheck.fulfilled]: (state, { payload }) => {
+      state.user = payload.user
+      state.auth = payload.auth
+      state.loading = false
+    },
+
+    // ---------- sign in ----------
+    [authSignin.fulfilled]: (state, { payload }) => {
+      state.user = payload.user
+      state.auth = payload.auth
+      state.loading = false
+    },
+
+    // ---------- sign out ----------
+    [authSignout.fulfilled]: (state) => {
+      state.user = ''
+      state.auth = false
+      state.loading = false
+    },
+  },
+})
+
+export default authReducer.reducer

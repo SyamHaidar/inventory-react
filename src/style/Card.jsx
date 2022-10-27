@@ -8,7 +8,6 @@ const Card = styled(Style)`
   display: block;
   overflow: hidden;
   border-radius: ${theme.size.rounded.main};
-  background-color: ${theme.color.paper};
 
   /* Variant Props */
   ${(props) => {
@@ -16,9 +15,11 @@ const Card = styled(Style)`
       case 'outline':
         return css`
           border: 1px solid ${theme.color.border};
+          background-color: ${theme.color.canvas};
         `
       default:
         return css`
+          background-color: ${theme.color.paper};
           box-shadow: ${theme.color.shadow.main};
         `
     }

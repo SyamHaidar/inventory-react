@@ -6,7 +6,7 @@ const BUTTON = {
 }
 
 const ROUNDED = {
-  main: '12px',
+  main: '20px',
   small: '6px',
   form: '8px',
   full: '9999px',
@@ -21,7 +21,7 @@ const SCREEN = {
 }
 
 const size = {
-  blur: 'blur(12px)',
+  blur: 'blur(8px)',
   button: { ...BUTTON },
   font: '16px',
   rounded: { ...ROUNDED },

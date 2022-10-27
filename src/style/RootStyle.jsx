@@ -51,6 +51,7 @@ export const RootStyle = createGlobalStyle`
   }
 
   h1, h2, h3, h4, h5, h6 {
+    font-family: 'Sora', sans-serif;
     font-size: inherit;
     font-weight: inherit;
   }
@@ -97,13 +98,24 @@ export const RootStyle = createGlobalStyle`
     background: transparent;
   }
 
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:active  {
+      box-shadow: 0 0 0 100px ${theme.color.canvas}cc inset !important;
+  }
+
+  input:-webkit-autofill {
+      -webkit-text-fill-color: ${theme.color.text.primary} !important;
+  }
+
   ::placeholder {
     color: ${theme.color.text.secondary};
   }
 
   ::-webkit-scrollbar {
-    height: 8px;
-    width: 8px; 
+    height: 6px;
+    width: 6px; 
   }
 
   ::-webkit-scrollbar-track {

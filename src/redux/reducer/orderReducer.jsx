@@ -1,32 +1,57 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { createOrder, deleteOrder, getOrder, getOrders } from '../actions/OrderAction'
+import {
+  createOrder,
+  deleteOrder,
+  editOrder,
+  getOrder,
+  getOrders,
+  updateOrder,
+} from '../actions/orderAction'
 
 // -------------------------------------------------------------------------
 
 const OrderReducer = createSlice({
   name: 'order',
   initialState: {
-    order: {},
-    orders: [],
+    data: '',
+    detail: '',
   },
   reducers: {},
   extraReducers: {
     // ---------- get all ----------
     [getOrders.fulfilled]: (state, { payload }) => {
-      state.orders = payload
+      state.data = payload
     },
-    // ---------- get detail ----------
+
+    // ---------- detail ----------
+    [getOrder.pending]: (state) => {
+      state.detail = ''
+    },
     [getOrder.fulfilled]: (state, { payload }) => {
-      state.order = payload
+      state.detail = payload
     },
+
     // ---------- create ----------
     [createOrder.fulfilled]: (state, { payload }) => {
-      state.orders = [...state.orders, payload]
+      state.data = [...state.data, payload]
     },
+
+    // ---------- edit ----------
+    [editOrder.pending]: (state) => {
+      state.detail = ''
+    },
+    [editOrder.fulfilled]: (state, { payload }) => {
+      state.detail = payload
+    },
+
+    // ---------- update ----------
+    [updateOrder.fulfilled]: (state, { payload }) => {
+      state.detail = payload
+    },
+
     // ---------- delete ----------
     [deleteOrder.fulfilled]: (state, { payload: id }) => {
-      state.loading = false
-      state.orders = state.orders.filter((item) => item.id !== id)
+      state.data = state.data.filter((item) => item.id !== id)
     },
   },
 })

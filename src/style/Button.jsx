@@ -29,15 +29,6 @@ const Button = styled(Style)`
             box-shadow: ${theme.color.shadow.button.brand};
           }
         `
-      case 'primary':
-        return css`
-          background-color: ${theme.color.primary.main};
-          color: ${theme.color.text.contrast};
-          border: 1px solid ${theme.color.primary.main};
-          &:hover {
-            box-shadow: ${theme.color.shadow.button.primary};
-          }
-        `
       case 'light':
         return css`
           background-color: ${theme.color.light};
@@ -46,23 +37,26 @@ const Button = styled(Style)`
         `
       case 'outline':
         return css`
-          /* background-color: ${theme.color.canvas}; */
-          color: ${theme.color.text.primary};
           border: 1px solid ${theme.color.border};
+          color: ${(props) => props.$color || theme.color.text.primary};
+          &:hover {
+            border: 1px solid ${(props) => props.$color || `${theme.color.boder}`};
+            background-color: ${(props) => props.$color + 14 || `${theme.color.light}99`};
+          }
         `
       default:
         return css`
-          color: ${theme.color.text.primary};
+          color: ${(props) => props.$color || theme.color.text.primary};
           &:hover {
-            background-color: ${theme.color.light};
+            background-color: ${(props) => props.$color + 14 || `${theme.color.light}99`};
           }
         `
     }
   }}
 
-  /* Height Props */
+  /* Size Props */
   ${(props) => {
-    switch (props.$height) {
+    switch (props.$size) {
       case 'small':
         return css`
           font-size: 12px;
@@ -87,16 +81,11 @@ const Button = styled(Style)`
   }}
 
   /* Width Props */
-  ${(props) => {
-    switch (props.$width) {
-      case 'full':
-        return css`
-          width: 100%;
-        `
-      default:
-        return css``
-    }
-  }}
+  ${(props) =>
+    props.$width &&
+    css`
+      width: 100%;
+    `}
 
   &:disabled {
     opacity: 0.5;
@@ -107,30 +96,41 @@ const Button = styled(Style)`
 // ----------------------------------------------------------------------
 
 export default function ButtonStyle({
+  children,
   text,
   iconSize,
   variant,
-  height,
-  width,
+  size,
+  width = false,
+  color,
   startIcon,
   endIcon,
   sx,
   ...other
 }) {
   return (
-    <Button as="button" $variant={variant} $height={height} $width={width} $sx={sx} {...other}>
+    <Button
+      as="button"
+      $variant={variant}
+      $size={size}
+      $width={width}
+      $color={color}
+      $sx={sx}
+      {...other}
+    >
       {startIcon || endIcon ? (
         <StackStyle
           direction={(startIcon && 'row') || (endIcon && 'row-reverse')}
           items="center"
-          spacing={8}
+          spacing={12}
         >
-          <SvgIconStyle icon={startIcon || endIcon} size={iconSize} />
+          <SvgIconStyle icon={startIcon || endIcon} size={size === 'small' ? '16' : iconSize} />
           <Box>{text}</Box>
         </StackStyle>
       ) : (
         <>{text}</>
       )}
+      {children}
     </Button>
   )
 }

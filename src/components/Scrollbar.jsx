@@ -29,6 +29,8 @@ const SimpleBar = styled(SimpleBarReact)`
   & .simplebar-mask {
     z-index: inherit;
   }
+
+  ${(props) => props.$sx}
 `
 
 // ----------------------------------------------------------------------
@@ -44,7 +46,7 @@ export default function Scrollbar({ children, sx, ...other }) {
 
   return (
     <Box sx={{ flexGrow: 1, height: '100%', overflow: 'hidden' }}>
-      <SimpleBar timeout={500} clickOnTrack={false} sx={sx} {...other}>
+      <SimpleBar timeout={500} clickOnTrack={false} $sx={sx} {...other}>
         {children}
       </SimpleBar>
     </Box>

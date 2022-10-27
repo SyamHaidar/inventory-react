@@ -1,35 +1,57 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { createUser, deleteUser, getUser, getUsers } from '../actions/userAction'
+import {
+  getUsers,
+  getUser,
+  createUser,
+  editUser,
+  updateUser,
+  deleteUser,
+} from '../actions/userAction'
 
 // -------------------------------------------------------------------------
 
 const userReducer = createSlice({
   name: 'user',
   initialState: {
-    user: {},
-    users: [],
-    loading: false,
+    data: '',
+    detail: '',
   },
   reducers: {},
   extraReducers: {
     // ---------- get all ----------
     [getUsers.fulfilled]: (state, { payload }) => {
-      state.users = payload
-      state.loading = false
+      state.data = payload
     },
+
     // ---------- get detail ----------
-    [getUser.fulfilled]: (state, { payload }) => {
-      state.user = payload
-      state.loading = false
+    [getUser.pending]: (state) => {
+      state.detail = ''
     },
+    [getUser.fulfilled]: (state, { payload }) => {
+      state.detail = payload
+    },
+
     // ---------- create ----------
     [createUser.fulfilled]: (state, { payload }) => {
-      state.user = [payload]
+      state.data = [...state.data, payload]
     },
+
+    // ---------- edit ----------
+    [editUser.pending]: (state) => {
+      state.detail = ''
+    },
+    [editUser.fulfilled]: (state, { payload }) => {
+      state.detail = payload
+    },
+
+    // ---------- update ----------
+    [updateUser.fulfilled]: (state, { payload }) => {
+      state.detail = payload
+    },
+
     // ---------- delete ----------
     [deleteUser.fulfilled]: (state, { payload: id }) => {
-      state.loading = false
-      state.users = state.users.filter((item) => item.id !== id)
+      state.data = state.data.filter((item) => item.id !== id)
     },
   },
 })

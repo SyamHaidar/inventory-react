@@ -1,46 +1,80 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 // style
-import { Box, Button, IconButton, Modal, Stack, TextField, Typography } from '../../../style'
+import { Stack, TextField } from '../../../style'
 // component
-import { Overlay } from '../../../components'
+import { FormModalAdd } from '../../../components'
+// redux component
+import { createUser } from '../../../redux/actions/userAction'
 
 // ----------------------------------------------------------------------
 
-export default function UserModalAdd() {
-  const [open, setOpen] = useState(false)
+export default function UserModalAdd({ open, isOpen }) {
+  const dispatch = useDispatch()
+
+  const initState = { fullName: '', password: '', roleId: '2' }
+  const [body, setBody] = useState(initState)
+
+  // disabled button save if data empty
+  const handleSave = !body.fullName || body.password.length < 6
+
+  // handle change body
+  const handleChange = (e, str) => {
+    // str variable is used for input validation
+    setBody({ ...body, [e.target.name]: !str ? e.target.value : e.target.value.replace(str, '') })
+  }
+
+  // handle submit form
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    dispatch(createUser(body))
+    // clear state & close modal
+    setBody(initState)
+    isOpen()
+  }
+
+  // input form field
+  const FORM_FIELD = [
+    {
+      label: 'Name',
+      name: 'fullName',
+      type: 'text',
+      value: body.fullName,
+      onChange: (e) => handleChange(e, /[^a-z 0-9]/gi),
+    },
+    {
+      label: 'Password',
+      name: 'password',
+      type: 'password',
+      value: body.password,
+      onChange: (e) => handleChange(e, ''),
+    },
+  ]
 
   return (
     <>
-      <IconButton onClick={() => setOpen(true)} icon="add" size="medium" variant="brand" />
-
       {open && (
-        <Overlay open={() => setOpen(false)}>
-          <Modal sx={{ padding: '24px' }}>
-            <Box sx={{ textAlign: 'left', marginBottom: '24px' }}>
-              <Typography as="h2" text="Add new user" weight="500" variant="primary" />
-            </Box>
-            <Stack direction="column" spacing={20}>
-              <TextField label="Name" type="text" required />
-              <TextField label="Password" type="password" required />
-            </Stack>
-            <Stack direction="column" spacing={12} sx={{ marginTop: '32px' }}>
-              <Button
-                onClick={() => setOpen(false)}
-                text="Create"
-                variant="brand"
-                height="medium"
-                width="full"
+        <FormModalAdd
+          title="user"
+          open={isOpen}
+          handleSave={handleSave}
+          handleSubmit={handleSubmit}
+        >
+          <Stack direction="column" spacing={20}>
+            {FORM_FIELD.map((field) => (
+              <TextField
+                key={field.name}
+                label={field.label}
+                name={field.name}
+                type={field.type}
+                required
+                value={field.value}
+                onChange={field.onChange}
               />
-              <Button
-                onClick={() => setOpen(false)}
-                text="Cancel"
-                variant="light"
-                height="medium"
-                width="full"
-              />
-            </Stack>
-          </Modal>
-        </Overlay>
+            ))}
+            <button hidden />
+          </Stack>
+        </FormModalAdd>
       )}
     </>
   )

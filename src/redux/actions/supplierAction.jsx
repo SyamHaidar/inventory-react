@@ -3,11 +3,14 @@ import { clientAPI as api } from '../../services/clientAPI'
 
 // ----------------------------------------------------------------------
 
+const ROUTE = '/supplier'
+
+// get all supplier data
 export const getSuppliers = createAsyncThunk(
   'supplier/getSuppliers',
   async (arg, { rejectWithValue }) => {
     try {
-      const { data } = await api.get('/supplier')
+      const { data } = await api.get(ROUTE)
       return data
     } catch (err) {
       return rejectWithValue(err.response.data)
@@ -15,11 +18,12 @@ export const getSuppliers = createAsyncThunk(
   }
 )
 
+// get supplier detail by name
 export const getSupplier = createAsyncThunk(
   'supplier/getSupplier',
   async (id, { rejectWithValue }) => {
     try {
-      const { data } = await api.get(`/supplier/${id}`)
+      const { data } = await api.get(ROUTE + `/${id}`)
       return data
     } catch (err) {
       return rejectWithValue(err.response.data)
@@ -27,11 +31,12 @@ export const getSupplier = createAsyncThunk(
   }
 )
 
+// create new supplier data
 export const createSupplier = createAsyncThunk(
   'supplier/createSupplier',
   async (body, { rejectWithValue }) => {
     try {
-      const { data } = await api.post('/supplier', body)
+      const { data } = await api.post(ROUTE, body)
       return data
     } catch (err) {
       return rejectWithValue(err.response.data)
@@ -39,11 +44,39 @@ export const createSupplier = createAsyncThunk(
   }
 )
 
+// get supplier detail by id for edit
+export const editSupplier = createAsyncThunk(
+  'supplier/editSupplier',
+  async (id, { rejectWithValue }) => {
+    try {
+      const { data } = await api.get(ROUTE + `/${id}/edit`)
+      return data
+    } catch (err) {
+      return rejectWithValue(err.response.data)
+    }
+  }
+)
+
+// update supplier data by id
+export const updateSupplier = createAsyncThunk(
+  'supplier/updateSupplier',
+  async ({ id, body, navigate }, { rejectWithValue }) => {
+    try {
+      const { data } = await api.patch(ROUTE + `/${id}/update`, body)
+      navigate(`/dashboard/supplier/${data.name.replace(/\s+/g, '').toLowerCase()}`)
+      return data
+    } catch (err) {
+      return rejectWithValue(err.response.data)
+    }
+  }
+)
+
+// delete supplier data by id
 export const deleteSupplier = createAsyncThunk(
   'supplier/deleteSupplier',
   async (id, { rejectWithValue }) => {
     try {
-      await api.delete(`/supplier/${id}`)
+      await api.delete(ROUTE + `/${id}/delete`)
       return id
     } catch (err) {
       return rejectWithValue(err.response.data)

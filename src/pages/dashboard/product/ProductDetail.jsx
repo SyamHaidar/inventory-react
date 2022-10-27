@@ -1,113 +1,123 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 // style
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  Divider,
-  Grid,
-  IconButton,
-  Stack,
-  theme,
-  Typography,
-} from '../../../style'
+import { Avatar, Box, Divider, Grid, Stack, theme, Typography } from '../../../style'
 // component
-import { Container, Header, Logo, Page } from '../../../components'
+import { Container, Header, Page, Spinner } from '../../../components'
 // redux action
 import { getProduct } from '../../../redux/actions/productAction'
 
 // ----------------------------------------------------------------------
 
 export default function ProductDetail() {
-  const product = useSelector((state) => state.product)
+  const product = useSelector((state) => state.product.detail)
   const dispatch = useDispatch()
 
-  const { id } = useParams()
-  const item = product.detail
+  const { name } = useParams()
 
   useEffect(() => {
-    dispatch(getProduct(id))
+    dispatch(getProduct(name))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [name])
 
-  console.log(item)
-
-  return (
+  return !product ? (
+    <Spinner />
+  ) : (
     <Page title="Order detail -">
-      <Header>
-        <Stack direction="row" justify="space-between" items="center" sx={{ width: '100%' }}>
-          <Stack direction="row" items="center" spacing={8}>
-            <IconButton as={Link} to="/dashboard/product" icon="arrow-left" />
-            <Typography
-              as="h1"
-              text="Product detail"
-              size={20}
-              weight="700"
-              variant="primary"
-              sx={{ padding: '18px 0' }}
+      <Header title="Product Detail" goBack />
+      <Container
+        sx={{
+          margin: '16px 0 64px',
+          '@media (min-width: 576px)': {
+            margin: '16px 0',
+          },
+        }}
+      >
+        <Grid>
+          <Box sx={{ padding: '8px' }}>
+            <Box
+              as="img"
+              src="/static/products/product_default.jpg"
+              sx={{
+                height: '400px',
+                width: '100%',
+                objectFit: 'cover',
+                borderRadius: theme.size.rounded.main,
+                '@media (min-width: 768px)': {
+                  height: '560px',
+                },
+              }}
             />
-          </Stack>
-          <Stack direction="row" items="center" spacing={8}>
-            <IconButton icon="eye" size="medium" />
-            <IconButton icon="download" size="medium" />
-            <Button startIcon="tick" text="Done" variant="outline" />
-          </Stack>
-        </Stack>
-      </Header>
-      <Container sx={{ margin: '16px 0 80px' }}>
-        <Card>
-          <Grid>
-            <Box sx={{ padding: '8px' }}>
-              <Box
-                as="img"
-                src="/static/products/product_13.jpg"
-                sx={{
-                  height: '480px',
-                  width: '100%',
-                  objectFit: 'cover',
-                  borderRadius: theme.size.rounded.main,
-                }}
-              />
-            </Box>
-            <Stack direction="column" spacing={40} sx={{ padding: '40px 64px' }}>
-              <Typography
-                // text="Nike Air Jordan 1 Low Reverse Black Toe Bulls"
-                text={item.name}
-                size={24}
-                weight="700"
-                variant="primary"
-              />
-              <Divider />
-              <Stack justify="space-between" items="center">
-                <Typography text="Category" weight="500" variant="primary" />
-                <Typography text="Sneakers" />
-              </Stack>
-              <Stack justify="space-between" items="center">
-                <Typography text="Stock" weight="500" variant="primary" />
-                <Typography text={item.quantity} />
-              </Stack>
-              <Stack
-                direction="row"
-                items="center"
-                spacing={12}
-                sx={{
-                  padding: '16px 0',
-                  borderTop: `1px solid ${theme.color.border}`,
-                  borderBottom: `1px solid ${theme.color.border}`,
-                }}
-              >
-                <Avatar src="/static/products/product_13.jpg" />
-                <Stack direction="column">
-                  <Typography text="Nike Indonesia" weight="500" variant="primary" />
-                  <Typography text="+628012345678" size={14} />
-                </Stack>
+          </Box>
+          <Stack direction="column" spacing={16} sx={{ padding: '24px' }}>
+            <Typography
+              text={
+                product.quantity > 10
+                  ? 'In Stock'
+                  : product.quantity > 1
+                  ? 'Low Stock'
+                  : product.quantity === null && 'Out Of Stock'
+              }
+              size={12}
+              weight="700"
+              sx={{
+                padding: '4px 12px',
+                backgroundColor:
+                  (product.quantity > 10 && `${theme.color.green.main}14`) ||
+                  (product.quantity > 1 && `${theme.color.yellow.main}14`) ||
+                  (product.quantity === null && `${theme.color.red.main}14`),
+                color:
+                  (product.quantity > 10 && `${theme.color.green.main}`) ||
+                  (product.quantity > 1 && `${theme.color.yellow.main}`) ||
+                  (product.quantity === null && `${theme.color.red.main}`),
+                borderRadius: theme.size.rounded.full,
+                marginRight: 'auto',
+                textTransform: 'uppercase',
+              }}
+            />
+            <Typography as="h2" text={product.name} size={24} weight="700" variant="primary" />
+            <Divider />
+            <Stack direction="row" items="flex-start" spacing={4}>
+              <Typography text="Category:" weight="500" />
+              <Stack direction="row" items="center" spacing={4}>
+                {product.category.map((category) => (
+                  <Typography
+                    key={category.name}
+                    text={category.name}
+                    size={14}
+                    variant="primary"
+                    sx={{
+                      padding: '2px 6px',
+                      backgroundColor: `${theme.color.light}99`,
+                      borderRadius: theme.size.rounded.small,
+                    }}
+                  />
+                ))}
               </Stack>
             </Stack>
-          </Grid>
-        </Card>
+            <Stack direction="row" items="flex-start" spacing={4}>
+              <Typography text="Stock:" weight="500" />
+              <Typography text={product.quantity ? product.quantity : '0'} variant="primary" />
+            </Stack>
+            <Stack
+              direction="row"
+              items="center"
+              spacing={12}
+              sx={{
+                padding: '16px 0',
+                borderTop: `1px solid ${theme.color.border}`,
+                borderBottom: `1px solid ${theme.color.border}`,
+              }}
+            >
+              <Avatar src="/static/avatars/avatar_default.jpg" />
+              <Stack direction="column">
+                <Typography text={product.supplier.name} weight="500" variant="primary" />
+                <Typography text={product.supplier.mobile} size={14} />
+              </Stack>
+            </Stack>
+          </Stack>
+        </Grid>
       </Container>
     </Page>
   )

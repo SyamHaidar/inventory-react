@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
 // style
-import { AnimateScaleY, AnimateZoom, Box, SvgIcon, theme } from '../../style'
+import { AnimateScaleY, AnimateZoom, SvgIcon, theme } from '../../style'
 
 // ----------------------------------------------------------------------
 
@@ -12,6 +12,7 @@ const Item = styled.div`
 
   &:hover > :first-child {
     background-color: ${theme.color.light};
+    color: ${theme.color.text.primary};
     transition: 0.3s;
 
     &::after {
@@ -21,8 +22,10 @@ const Item = styled.div`
       width: auto;
       margin-left: 38px;
       font-size: 13px;
-      background-color: ${theme.color.brand.main};
+      background-color: ${theme.color.paper}a6;
+      backdrop-filter: ${theme.size.blur};
       color: ${theme.color.text.contrast};
+      box-shadow: ${theme.color.shadow.main};
       border-radius: ${theme.size.rounded.full};
       animation: ${AnimateZoom} 0.3s ease-out;
       transform-origin: left;
@@ -30,7 +33,7 @@ const Item = styled.div`
   }
 
   &.active > :first-child {
-    background-color: ${theme.color.brand.main}14;
+    background-color: ${theme.color.brand.main}29;
     color: ${theme.color.brand.main};
     transition: 0.3s;
 
@@ -47,6 +50,16 @@ const Item = styled.div`
   }
 `
 
+const Wrapper = styled.div`
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: ${theme.size.rounded.full};
+`
+
+// ----------------------------------------------------------------------
+
 export default function NavSection() {
   const MENU = [
     { to: '/dashboard', icon: 'element', name: 'Dashboard' },
@@ -54,23 +67,16 @@ export default function NavSection() {
     { to: '/dashboard/order', icon: 'receipt', name: 'Order' },
     { to: '/dashboard/supplier', icon: 'truck', name: 'Supplier' },
     { to: '/dashboard/user', icon: 'users', name: 'User' },
+    // { to: '/dashboard/notification', icon: 'notification', name: 'Notification' },
   ]
 
   return (
     <>
       {MENU.map((item) => (
         <Item key={item.name} as={NavLink} to={item.to} $itemName={item.name} end>
-          <Box
-            sx={{
-              position: 'relative',
-              display: 'inline-flex',
-              alignItems: 'center',
-              padding: '12px',
-              borderRadius: theme.size.rounded.main,
-            }}
-          >
+          <Wrapper>
             <SvgIcon icon={item.icon} size={20} />
-          </Box>
+          </Wrapper>
         </Item>
       ))}
     </>

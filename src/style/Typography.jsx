@@ -21,7 +21,9 @@ const Typography = styled(Style)`
           color: ${theme.color.text.disabled};
         `
       default:
-        return css``
+        return css`
+          color: ${(props) => props.$color};
+        `
     }
   }}
 
@@ -62,6 +64,7 @@ export default function TypographyStyle({
   lineClamp = '',
   lineHeight,
   noWrap = false,
+  color,
   sx,
   ...other
 }) {
@@ -75,6 +78,7 @@ export default function TypographyStyle({
       $lineHeight={lineHeight && `${lineHeight}px`}
       $noWrap={noWrap}
       $sx={sx}
+      $color={color}
       {...other}
     >
       {text}

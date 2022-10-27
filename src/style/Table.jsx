@@ -47,6 +47,11 @@ const TableCell = styled(Style)`
           padding: 0 0 0 24px;
           width: 48px;
         `
+      case 'more':
+        return css`
+          padding: 0 24px 0 0;
+          width: 48px;
+        `
       default:
         return css`
           padding: 16px;

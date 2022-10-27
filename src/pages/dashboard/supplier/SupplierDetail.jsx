@@ -1,97 +1,137 @@
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components/macro'
 // style
-import { Avatar, Box, Button, Card, IconButton, Stack, theme, Typography } from '../../../style'
+import { Avatar, Box, Button, Card, Stack, SvgIcon, theme, Typography } from '../../../style'
 // component
-import { Container, Header, Page } from '../../../components'
-//
-import UserListActivity from '../../../sections/dashboard/user/UserListActivity'
+import { Container, Header, Page, Spinner } from '../../../components'
+// redux action
+import { deleteSupplier, getSupplier } from '../../../redux/actions/supplierAction'
+import SupplierProductList from '../../../sections/dashboard/supplier/SupplierProductList'
 
 // ----------------------------------------------------------------------
 
 const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  @media (min-width: 992px) {
+    flex-direction: row;
+  }
+`
+
+const PictureWrapper = styled.div`
   border-radius: ${theme.size.rounded.full};
   border: 1.5px dashed ${theme.color.border};
   padding: 8px;
 `
 
+const UserCard = styled.div`
+  width: 100%;
+  flex-shrink: 0;
+  margin-right: 0;
+  margin-bottom: 16px;
+  @media (min-width: 992px) {
+    margin-right: 16px;
+    width: 360px;
+  }
+`
+
 // ----------------------------------------------------------------------
 
 export default function SupplierDetail() {
-  return (
-    <Page title="Order detail -">
-      <Header>
-        <Stack direction="row" justify="space-between" items="center" sx={{ width: '100%' }}>
-          <Stack direction="row" items="center" spacing={8}>
-            <IconButton icon="arrow-left" />
-            <Typography
-              as="h1"
-              text="Supplier detail"
-              size={20}
-              weight="700"
-              variant="primary"
-              sx={{ padding: '18px 0' }}
-            />
-          </Stack>
-          <Stack direction="row" items="center" spacing={8}>
-            <Button startIcon="edit" text="Edit" variant="outline" />
-          </Stack>
+  const supplier = useSelector((state) => state.supplier.detail)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const { name } = useParams()
+
+  const handleEdit = () => {
+    navigate(`/dashboard/supplier/${supplier.id}/edit`)
+  }
+
+  const handleDelete = () => {
+    dispatch(deleteSupplier(supplier.id))
+    navigate('/dashboard/supplier')
+  }
+
+  useEffect(() => {
+    dispatch(getSupplier(name))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name])
+
+  return !supplier ? (
+    <Spinner />
+  ) : (
+    <Page title={`${supplier.name} -`}>
+      <Header title={`${supplier.name}`} goBack>
+        <Stack direction="row" items="center" spacing={8}>
+          <Button onClick={handleEdit} startIcon="edit" text="Edit" variant="outline" />
+          <Button
+            onClick={handleDelete}
+            startIcon="trash"
+            text="Delete"
+            variant="outline"
+            color={theme.color.red.main}
+          />
         </Stack>
       </Header>
-      <Container sx={{ margin: '16px 0 80px' }}>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            '@media (min-width: 992px)': {
-              flexDirection: 'row',
-            },
-          }}
-        >
-          <Box
-            sx={{
-              width: '100%',
-              marginRight: '24px',
-              flexShrink: 0,
-              marginBottom: '24px',
-              '@media (min-width: 992px)': {
-                width: '360px',
-              },
-            }}
-          >
-            <Card sx={{ padding: '80px 24px' }}>
-              <Stack direction="column" items="center">
-                <Wrapper className="profile">
-                  <Avatar
-                    src={'/static/avatars/avatar_10.jpg'}
-                    alt={`Anya's profile picture`}
-                    size={128}
-                  />
-                </Wrapper>
-                <Stack
-                  direction="column"
-                  items="center"
-                  sx={{ marginTop: '16px', textAlign: 'center' }}
-                >
-                  <Typography as="h3" text="Telkompret" size={20} weight="700" variant="primary" />
-                  <Typography text="188" />
+      <Container sx={{ margin: '16px 0' }}>
+        <Wrapper>
+          <UserCard>
+            <Card sx={{ position: 'sticky', top: '80px', padding: '48px 24px' }}>
+              <Stack direction="column" items="center" spacing={16}>
+                <Box>
+                  <PictureWrapper>
+                    <Avatar
+                      src={'/static/avatars/avatar_default.jpg'}
+                      name={`${supplier.name}'s profile picture`}
+                      size={128}
+                    />
+                  </PictureWrapper>
+                </Box>
+                <Stack direction="column" spacing={40} sx={{ width: '100%' }}>
                   <Typography
-                    text="Kecamatan Mampang Prapatan, Jakarta"
-                    size={14}
-                    sx={{ marginTop: '12px' }}
+                    as="h3"
+                    text={supplier.name}
+                    size={18}
+                    weight="700"
+                    variant="primary"
+                    sx={{ textAlign: 'center' }}
                   />
+                  <Stack direction="column" spacing={16}>
+                    <Stack direction="row" items="flex-start" spacing={12}>
+                      <SvgIcon
+                        icon="location"
+                        size={16}
+                        variant="primary"
+                        sx={{ marginTop: '2px', flexShrink: '0' }}
+                      />
+                      <Typography text={`${supplier.address}, ${supplier.location}`} size={14} />
+                    </Stack>
+                    <Stack direction="row" items="flex-start" spacing={12}>
+                      <SvgIcon
+                        icon="call"
+                        size={16}
+                        variant="primary"
+                        sx={{ marginTop: '2px', flexShrink: '0' }}
+                      />
+                      <Typography text={supplier.mobile} size={14} />
+                    </Stack>
+                  </Stack>
                 </Stack>
               </Stack>
             </Card>
-          </Box>
+          </UserCard>
           <Box sx={{ width: '100%' }}>
             <Card>
               <Box sx={{ padding: '24px' }}>
-                <Typography text="Activity" weight="700" variant="primary" />
+                <Typography text="Product list" weight="700" variant="primary" />
               </Box>
-              <UserListActivity />
+              <SupplierProductList data={supplier.product} />
             </Card>
           </Box>
-        </Box>
+        </Wrapper>
       </Container>
     </Page>
   )

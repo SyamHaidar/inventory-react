@@ -17,7 +17,7 @@ export default function TableListHead({ label }) {
             borderBottomLeftRadius: theme.size.rounded.main,
             boxShadow: `${theme.color.paper} 8px 0px 0px inset`,
           },
-          '& > :last-child': {
+          '& > :last-of-type': {
             borderTopRightRadius: theme.size.rounded.main,
             borderBottomRightRadius: theme.size.rounded.main,
             boxShadow: `${theme.color.paper} -8px 0px 0px inset`,

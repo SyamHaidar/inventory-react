@@ -15,7 +15,7 @@ export const AnimateFade = keyframes`
 export const AnimateModal = keyframes`
   from {
     opacity: 0;
-    transform: scale(0.85);
+    transform: scale(1.2);
   }
 
   to {
@@ -65,11 +65,15 @@ export const AnimateSpin = keyframes`
 export const AnimateZoom = keyframes`
   0% {
     transform: scale(0);
-    /* opacity: 0; */
+    opacity: 0;
+  }
+  
+  50% {
+    opacity: 0;
   }
   
   100% {
     transform: scale(1);
-    /* opacity: 1; */
+    opacity: 1;
   }
 `

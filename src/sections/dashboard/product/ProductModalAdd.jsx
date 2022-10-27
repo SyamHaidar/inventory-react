@@ -1,87 +1,142 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 // style
-import { Box, Button, IconButton, Modal, Stack, TextField, Typography } from '../../../style'
+import { Button, Stack, TextField } from '../../../style'
 // component
-import { Overlay } from '../../../components'
-//
+import { FormModalAdd, Spinner } from '../../../components'
+// redux action
 import { createProduct } from '../../../redux/actions/productAction'
+import { getSuppliers } from '../../../redux/actions/supplierAction'
+//
+import SupplierModalAdd from '../supplier/SupplierModalAdd'
+import SelectList from '../SelectList'
 
 // ----------------------------------------------------------------------
 
-export default function ProductModalAdd() {
-  const isSuccess = useSelector((state) => state.product.success)
+export default function ProductModalAdd({ open, isOpen }) {
+  const supplier = useSelector((state) => state.supplier.data)
   const dispatch = useDispatch()
 
-  const [product, setProduct] = useState({ name: '', category: '', quantity: '' })
-  const [open, setOpen] = useState(false)
-  const isOpen = () => setOpen(!open)
+  const [name, setName] = useState('')
+  const [supplierId, setSupplierId] = useState('')
+  const [supplierName, setSupplierName] = useState('Choose supplier')
+  const [category, setCategory] = useState('')
 
-  console.log(isSuccess)
+  const body = { name: name, supplier: supplierName, supplierId: supplierId, category: category }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    dispatch(createProduct(product))
-    if (isSuccess) {
-      setOpen(false)
-      setProduct({ name: '', quantity: '' })
-    }
+  // sort data by name
+  const newSupplier = [...supplier]
+  const supplierData = newSupplier.sort((a, b) => a.name.localeCompare(b.name))
+
+  // form modal supplier toggle
+  const [openSupplier, setOpenSupplier] = useState(false)
+  const isOpenSupplier = () => setOpenSupplier(!openSupplier)
+
+  // form modal add supplier toggle
+  const [openAddSupplier, setOpenAddSupplier] = useState(false)
+  const isOpenAddSupplier = () => {
+    setOpenAddSupplier(!openAddSupplier)
+    isOpenSupplier()
   }
 
-  const handleChange = (e) => {
-    setProduct({ ...product, [e.target.name]: e.target.value })
+  // disabled button save if data empty
+  const handleSave = !name || !supplierId
+
+  // handle submit form
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    await dispatch(createProduct(body))
+    // clear state & close modal
+    setName('')
+    setSupplierId('')
+    setSupplierName('')
+    setCategory('')
+    isOpen()
   }
 
   return (
     <>
-      <IconButton onClick={isOpen} icon="add" size="medium" variant="brand" />
-
+      {/* add new product modal */}
       {open && (
-        <Overlay open={isOpen}>
-          <Modal position="bottom" sx={{ padding: '24px' }}>
-            <Stack direction="column" sx={{ height: '100%' }}>
-              <Box sx={{ textAlign: 'left', marginBottom: '24px' }}>
-                <Typography as="h2" text="Add product" size={24} weight="700" variant="primary" />
-              </Box>
-              <Stack direction="column" spacing={20} sx={{ flex: 'auto' }}>
-                <TextField
-                  label="Name"
-                  name="name"
-                  type="text"
-                  required
-                  value={product.name}
-                  onChange={handleChange}
-                />
-                <TextField
-                  label="Category"
-                  name="category"
-                  type="text"
-                  required
-                  value={product.category}
-                  onChange={handleChange}
-                />
-                <TextField
-                  label="Quantity"
-                  name="quantity"
-                  type="text"
-                  required
-                  value={product.quantity}
-                  onChange={handleChange}
-                />
-              </Stack>
-              <Stack direction="row" justify="flex-end" spacing={12} sx={{ marginTop: '32px' }}>
-                <Button onClick={isOpen} text="Cancel" variant="light" height="medium" />
-                <Button
-                  onClick={handleSubmit}
-                  text="Save Product"
-                  variant="brand"
-                  height="medium"
-                />
-              </Stack>
-            </Stack>
-          </Modal>
-        </Overlay>
+        <FormModalAdd
+          title="product"
+          open={isOpen}
+          handleSave={handleSave}
+          handleSubmit={handleSubmit}
+        >
+          <Stack
+            as="form"
+            onSubmit={handleSubmit}
+            direction="column"
+            spacing={20}
+            sx={{ flex: 'auto' }}
+          >
+            <TextField
+              onClick={isOpenSupplier}
+              label="Supplier"
+              name="supplier"
+              type="text"
+              required
+              readOnly
+              value={supplierName}
+            />
+            <TextField
+              label="Product name"
+              name="name"
+              type="text"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value.replace(/[^a-z 0-9]/gi, ''))}
+            />
+            <TextField
+              label="Category"
+              name="category"
+              type="text"
+              required
+              value={category}
+              onChange={(e) => setCategory(e.target.value.replace(/[^a-z 0-9,]/gi, '').split(','))}
+            />
+            <button hidden />
+          </Stack>
+        </FormModalAdd>
       )}
+
+      {/* select supplier modal */}
+      {openSupplier && (
+        <SelectList
+          data={getSuppliers()}
+          open={openSupplier}
+          isOpen={isOpenSupplier}
+          onAddData={isOpenAddSupplier}
+          title="supplier"
+        >
+          {!supplierData ? (
+            <Spinner height={128} />
+          ) : (
+            <Stack direction="column" spacing={4}>
+              {supplierData.map((supplier) => (
+                <Button
+                  key={supplier.id}
+                  text={supplier.name}
+                  size="medium"
+                  onClick={() => {
+                    setSupplierId(supplier.id)
+                    setSupplierName(supplier.name)
+                    isOpenSupplier()
+                  }}
+                  sx={{
+                    justifyContent: 'left!important',
+                    borderRadius: '0!important',
+                    padding: '0 24px!important',
+                  }}
+                />
+              ))}
+            </Stack>
+          )}
+        </SelectList>
+      )}
+
+      <SupplierModalAdd open={openAddSupplier} isOpen={isOpenAddSupplier} />
     </>
   )
 }

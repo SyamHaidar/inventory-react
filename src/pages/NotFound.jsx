@@ -6,7 +6,7 @@ import { Container, Logo, Page } from '../components'
 
 // -----------------------------------------------------------------------------
 
-export default function Login() {
+export default function NotFound() {
   return (
     <Page title="Page not found &ndash; ">
       <Box sx={{ position: 'absolute', top: 0, padding: '24px 24px 0' }}>
@@ -48,8 +48,8 @@ export default function Login() {
             as={Link}
             to={'/'}
             text="Back to home"
-            variant="primary"
-            height="large"
+            variant="brand"
+            size="large"
             sx={{ marginTop: '24px' }}
           />
         </Stack>
