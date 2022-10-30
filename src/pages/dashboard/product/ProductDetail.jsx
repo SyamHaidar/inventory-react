@@ -28,14 +28,14 @@ export default function ProductDetail() {
       <Header title="Product Detail" goBack />
       <Container
         sx={{
-          margin: '16px 0 64px',
-          '@media (min-width: 576px)': {
-            margin: '16px 0',
+          padding: '0 16px 80px',
+          '@media (min-width:576px)': {
+            padding: '0 16px 16px',
           },
         }}
       >
         <Grid>
-          <Box sx={{ padding: '8px' }}>
+          <Box>
             <Box
               as="img"
               src="/static/products/product_default.jpg"
@@ -65,11 +65,11 @@ export default function ProductDetail() {
                 padding: '4px 12px',
                 backgroundColor:
                   (product.quantity > 10 && `${theme.color.green.main}14`) ||
-                  (product.quantity > 1 && `${theme.color.yellow.main}14`) ||
+                  (product.quantity >= 1 && `${theme.color.yellow.main}14`) ||
                   (product.quantity === null && `${theme.color.red.main}14`),
                 color:
                   (product.quantity > 10 && `${theme.color.green.main}`) ||
-                  (product.quantity > 1 && `${theme.color.yellow.main}`) ||
+                  (product.quantity >= 1 && `${theme.color.yellow.main}`) ||
                   (product.quantity === null && `${theme.color.red.main}`),
                 borderRadius: theme.size.rounded.full,
                 marginRight: 'auto',
@@ -80,15 +80,15 @@ export default function ProductDetail() {
             <Divider />
             <Stack direction="row" items="flex-start" spacing={4}>
               <Typography text="Category:" weight="500" />
-              <Stack direction="row" items="center" spacing={4}>
+              <Stack direction="row" items="center" sx={{ flexWrap: 'wrap' }}>
                 {product.category.map((category) => (
                   <Typography
-                    key={category.name}
+                    key={category.id}
                     text={category.name}
-                    size={14}
                     variant="primary"
                     sx={{
-                      padding: '2px 6px',
+                      padding: '0 6px',
+                      margin: '0 4px 4px 0',
                       backgroundColor: `${theme.color.light}99`,
                       borderRadius: theme.size.rounded.small,
                     }}

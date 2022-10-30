@@ -30,12 +30,12 @@ export default function Dashboard() {
   return (
     <Page title="Dashboard -">
       <Header title="Dashboard" />
-      <Container sx={{ margin: '16px 0' }}>
+      <Container sx={{ marginBottom: '16px' }}>
         <Stack direction="column" spacing={16}>
           <Grid columns sm="2" lg="4" sx={{ marginBottom: '16px' }}>
             <WidgetSummary
               name="Order In"
-              value="0"
+              value={orders.length}
               icon="arrow-left"
               color="green"
               iconSx={{ transform: ' rotate(-45deg)' }}

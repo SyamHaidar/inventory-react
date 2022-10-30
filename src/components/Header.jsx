@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
+import NavAccount from '../layouts/dashboard/NavAccount'
 // style
 import { BackDrop, IconButton, Stack, Sticky, Typography } from '../style'
 //
@@ -6,8 +7,9 @@ import Container from './Container'
 
 // ----------------------------------------------------------------------
 
-export default function Header({ children, title, goBack = false, height }) {
+export default function Header({ title, goBack = false, height }) {
   const navigate = useNavigate()
+
   return (
     <Sticky sx={{ top: 0, zIndex: 10, height: (height && `${height}px`) || '64px' }}>
       <BackDrop sx={{ display: 'block', height: '100%' }}>
@@ -18,14 +20,17 @@ export default function Header({ children, title, goBack = false, height }) {
               <Typography
                 as="h1"
                 text={title}
-                size={20}
+                size={18}
                 weight="700"
                 variant="primary"
                 lineClamp="1"
                 sx={{ maxWidth: '360px', '@media (max-width: 768px)': { maxWidth: '180px' } }}
               />
             </Stack>
-            {children}
+            <Stack direction="row" items="center" spacing={12}>
+              <IconButton as={Link} to={'/dashboard/log'} icon="log" size="medium" />
+              <NavAccount />
+            </Stack>
           </Stack>
         </Container>
       </BackDrop>

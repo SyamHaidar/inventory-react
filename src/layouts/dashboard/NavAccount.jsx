@@ -70,7 +70,7 @@ export default function NavAccount() {
       >
         <Wrapper>
           <Avatar
-            size={40}
+            size={36}
             src={'/static/avatars/avatar_default.jpg'}
             alt={`${user.fullName}'s profile picture`}
           />

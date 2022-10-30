@@ -16,6 +16,10 @@ const Typography = styled(Style)`
         return css`
           color: ${theme.color.text.primary};
         `
+      case 'secondary':
+        return css`
+          color: ${theme.color.text.secondary};
+        `
       case 'muted':
         return css`
           color: ${theme.color.text.disabled};

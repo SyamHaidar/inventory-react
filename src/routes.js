@@ -12,7 +12,7 @@ import SupplierDetail from './pages/dashboard/supplier/SupplierDetail'
 import User from './pages/dashboard/User'
 import UserDetail from './pages/dashboard/user/UserDetail'
 import UserEdit from './pages/dashboard/user/UserEdit'
-import Notification from './pages/dashboard/Notification'
+import Log from './pages/dashboard/Log'
 //
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
@@ -59,7 +59,7 @@ export default function Router() {
             { path: ':id/edit', element: <UserEdit /> },
           ],
         },
-        { path: 'notification', element: <Notification /> },
+        { path: 'log', element: <Log /> },
       ],
     },
   ])

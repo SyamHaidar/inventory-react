@@ -9,7 +9,6 @@ const ROUTE = '/auth'
 export const authCheck = createAsyncThunk('auth/getAuth', async (arg, { rejectWithValue }) => {
   try {
     const { data } = await api.get(ROUTE)
-    console.log(data)
     return data
   } catch (err) {
     return rejectWithValue(err.response.data)

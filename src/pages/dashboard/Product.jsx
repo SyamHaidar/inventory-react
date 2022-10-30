@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 // component
-import { Container, Header, Page } from '../../components'
+import { Header, Page } from '../../components'
 //redux action
 import { getProducts } from '../../redux/actions/productAction'
 //
@@ -20,9 +20,7 @@ export default function Product() {
   return (
     <Page title="Product -">
       <Header title="Product" />
-      <Container sx={{ margin: '16px 0' }}>
-        <ProductList />
-      </Container>
+      <ProductList />
     </Page>
   )
 }

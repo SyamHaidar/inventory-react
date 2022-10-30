@@ -3,46 +3,43 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import moment from 'moment'
 // style
-import { Button, Grid, Stack, TextField, theme, Typography } from '../../../style'
+import { Grid, Stack, TextField, theme, Typography } from '../../../style'
 // component
 import { FormModalAdd, Spinner } from '../../../components'
-// redux action
-import { createOrder, editOrder, updateOrder } from '../../../redux/actions/orderAction'
-import { getSuppliers } from '../../../redux/actions/supplierAction'
-//
 import SupplierModalAdd from '../supplier/SupplierModalAdd'
 import ProductModalAdd from '../product/ProductModalAdd'
 import SelectList from '../SelectList'
+// redux action
+import { createOrder, editOrder, updateOrder } from '../../../redux/actions/orderAction'
 import { getProducts } from '../../../redux/actions/productAction'
 
 // ----------------------------------------------------------------------
 
 export default function OrderModalAdd({ open, isOpen, isEdit = false, id }) {
   const product = useSelector((state) => state.product.data)
-  const supplier = useSelector((state) => state.supplier.data)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const [productId, setProductId] = useState('')
-  const [productName, setProductName] = useState('Choose product')
+  const [productName, setProductName] = useState('Select product')
   const [supplierId, setSupplierId] = useState('')
   const [supplierName, setSupplierName] = useState('')
   const [date, setDate] = useState('')
   const [quantity, setQuantity] = useState('')
+  const [status, setStatus] = useState('')
+  const [statusName, setStatusName] = useState('Select status')
 
   const body = {
     productId: productId,
     supplierId: supplierId,
     date: date,
     quantity: quantity,
+    status: status,
   }
 
   // sort data by name
   const newProduct = [...product]
   const productData = newProduct.sort((a, b) => a.name.localeCompare(b.name))
-
-  const newSupplier = [...supplier]
-  const supplierData = newSupplier.sort((a, b) => a.name.localeCompare(b.name))
 
   // form modal product toggle
   const [openProduct, setOpenProduct] = useState(false)
@@ -55,16 +52,19 @@ export default function OrderModalAdd({ open, isOpen, isEdit = false, id }) {
     isOpenProduct()
   }
 
-  // form modal supplier toggle
-  const [openSupplier, setOpenSupplier] = useState(false)
-  const isOpenSupplier = () => setOpenSupplier(!openSupplier)
-
   // form modal add supplier toggle
   const [openAddSupplier, setOpenAddSupplier] = useState(false)
-  const isOpenAddSupplier = () => {
-    setOpenAddSupplier(!openAddSupplier)
-    isOpenSupplier()
-  }
+  const isOpenAddSupplier = () => setOpenAddSupplier(!openAddSupplier)
+
+  // form modal status toggle
+  const [openStatus, setOpenStatus] = useState(false)
+  const isOpenStatus = () => setOpenStatus(!openStatus)
+
+  // status order value
+  const selectStatus = [
+    { status: true, name: 'Order In', color: 'green' },
+    { status: false, name: 'Order Out', color: 'red' },
+  ]
 
   // disabled button save if data empty
   const handleSave = !productId || !date || !quantity
@@ -72,28 +72,20 @@ export default function OrderModalAdd({ open, isOpen, isEdit = false, id }) {
   // handle submit form
   const handleSubmit = async (e) => {
     e.preventDefault()
-    await dispatch(createOrder(body))
+    if (!isEdit) {
+      await dispatch(createOrder(body))
+    } else {
+      await dispatch(updateOrder({ id, body, navigate }))
+    }
     // clear state & close modal
     setProductId('')
-    setProductName('')
+    setProductName('Select product')
     setSupplierId('')
     setSupplierName('')
     setDate('')
     setQuantity('')
-    isOpen()
-  }
-
-  // handle edit form
-  const handleEdit = async (e) => {
-    e.preventDefault()
-    await dispatch(updateOrder({ id, body, navigate }))
-    // clear state & close modal
-    setProductId('')
-    setProductName('')
-    setSupplierId('')
-    setSupplierName('')
-    setDate('')
-    setQuantity('')
+    setStatus('')
+    setStatusName('Select status')
     isOpen()
   }
 
@@ -104,8 +96,9 @@ export default function OrderModalAdd({ open, isOpen, isEdit = false, id }) {
     setSupplierId(payload.supplierId)
     setSupplierName(payload.supplier.name)
     setDate(moment.unix(payload.date).format('Y-MM-DD'))
+    setStatus(payload.status)
+    setStatusName(payload.status ? 'Order In' : 'Order Out')
     setQuantity(payload.quantity)
-    console.log(payload)
   }
 
   useEffect(() => {
@@ -124,8 +117,7 @@ export default function OrderModalAdd({ open, isOpen, isEdit = false, id }) {
           open={isOpen}
           handleSave={handleSave}
           handleSubmit={handleSubmit}
-          handleEdit={handleEdit}
-          isEdit
+          isEdit={isEdit}
         >
           <Stack
             as="form"
@@ -145,7 +137,6 @@ export default function OrderModalAdd({ open, isOpen, isEdit = false, id }) {
                 value={productName}
               />
               <TextField
-                onClick={isOpenSupplier}
                 label="Supplier"
                 name="supplier"
                 type="text"
@@ -154,24 +145,32 @@ export default function OrderModalAdd({ open, isOpen, isEdit = false, id }) {
                 disabled
                 value={supplierName}
               />
+              <TextField
+                label="Date"
+                name="date"
+                type="date"
+                required
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+              <TextField
+                label="Quantity"
+                name="quantity"
+                type="text"
+                required
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value.replace(/\D/g, ''))}
+              />
             </Grid>
             <TextField
-              label="Quantity"
-              name="quantity"
+              onClick={isOpenStatus}
+              label="Status"
+              name="status"
               type="text"
               required
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value.replace(/\D/g, ''))}
+              readOnly
+              value={statusName}
             />
-            <TextField
-              label="Date"
-              name="date"
-              type="date"
-              required
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-            />
-            <button hidden />
           </Stack>
         </FormModalAdd>
       )}
@@ -209,7 +208,7 @@ export default function OrderModalAdd({ open, isOpen, isEdit = false, id }) {
                     },
                   }}
                 >
-                  <Typography text={product.name} size={14} weight="700" variant="primary" />
+                  <Typography text={product.name} size={14} weight="500" variant="primary" />
                   <Typography text={product.supplier.name} size={12} />
                 </Stack>
               ))}
@@ -218,38 +217,32 @@ export default function OrderModalAdd({ open, isOpen, isEdit = false, id }) {
         </SelectList>
       )}
 
-      {/* select supplier modal */}
-      {openSupplier && (
-        <SelectList
-          data={getSuppliers()}
-          open={openSupplier}
-          isOpen={isOpenSupplier}
-          onAddData={isOpenAddSupplier}
-          title="supplier"
-        >
-          {!supplierData ? (
-            <Spinner height={128} />
-          ) : (
-            <Stack direction="column" spacing={4}>
-              {supplierData.map((supplier) => (
-                <Button
-                  key={supplier.id}
-                  text={supplier.name}
-                  size="medium"
-                  onClick={() => {
-                    setSupplierId(supplier.id)
-                    setSupplierName(supplier.name)
-                    isOpenSupplier()
-                  }}
-                  sx={{
-                    justifyContent: 'left!important',
-                    borderRadius: '0!important',
-                    padding: '0 24px!important',
-                  }}
-                />
-              ))}
-            </Stack>
-          )}
+      {/* select status modal */}
+      {openStatus && (
+        <SelectList open={openStatus} isOpen={isOpenStatus} title="status">
+          <Stack direction="column" spacing={4}>
+            {selectStatus.map((status) => (
+              <Typography
+                onClick={() => {
+                  setStatus(status.status)
+                  setStatusName(status.name)
+                  isOpenStatus()
+                }}
+                as="div"
+                text={status.name}
+                size={14}
+                weight="500"
+                color={theme.color[status.color].main}
+                sx={{
+                  padding: '8px 24px',
+                  '&:hover': {
+                    backgroundColor: `${theme.color.light}99`,
+                    cursor: 'pointer',
+                  },
+                }}
+              />
+            ))}
+          </Stack>
         </SelectList>
       )}
 

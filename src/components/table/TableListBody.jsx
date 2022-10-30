@@ -1,5 +1,5 @@
 // style
-import { Box, TableBody, TableCell, TableRow } from '../../style'
+import { Box, TableBody, TableCell, TableRow, theme } from '../../style'
 // component
 import Spinner from '../loading/Spinner'
 
@@ -7,7 +7,7 @@ import Spinner from '../loading/Spinner'
 
 export default function TableListBody({ children, data }) {
   return (
-    <TableBody>
+    <TableBody sx={{ color: theme.color.text.primary }}>
       {!data ? (
         <TableRow>
           <TableCell colSpan="12">

@@ -7,7 +7,7 @@ import { Box, theme } from '../style'
 
 const SimpleBar = styled(SimpleBarReact)`
   height: 100%;
-  
+
   & .simplebar-scrollbar {
     &::before {
       background-color: ${theme.color.scrollbar};
@@ -36,13 +36,13 @@ const SimpleBar = styled(SimpleBarReact)`
 // ----------------------------------------------------------------------
 
 export default function Scrollbar({ children, sx, ...other }) {
-  const userAgent = typeof navigator === 'undefined' ? 'SSR' : navigator.userAgent
+  // const userAgent = typeof navigator === 'undefined' ? 'SSR' : navigator.userAgent
 
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)
+  // const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)
 
-  if (isMobile) {
-    return <Box $sx={{ overflowX: 'auto' }}>{children}</Box>
-  }
+  // if (isMobile) {
+  //   return <Box $sx={{ overflowX: 'auto' }}>{children}</Box>
+  // }
 
   return (
     <Box sx={{ flexGrow: 1, height: '100%', overflow: 'hidden' }}>

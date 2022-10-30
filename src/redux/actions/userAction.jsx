@@ -5,6 +5,19 @@ import { clientAPI as api } from '../../services/clientAPI'
 
 const ROUTE = '/user'
 
+// get all search product data
+export const searchUsers = createAsyncThunk(
+  'user/searchUsers',
+  async (name, { rejectWithValue }) => {
+    try {
+      const { data } = await api.get(ROUTE + `/search?name=${name}`)
+      return data
+    } catch (err) {
+      return rejectWithValue(err.response.data)
+    }
+  }
+)
+
 // get all user data
 export const getUsers = createAsyncThunk('user/getUsers', async (arg, { rejectWithValue }) => {
   try {

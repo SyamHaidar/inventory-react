@@ -1,13 +1,13 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import styled from 'styled-components/macro'
 // style
-import { Avatar, Box, Button, Card, Stack, SvgIcon, theme, Typography } from '../../../style'
+import { Avatar, Box, Card, Stack, SvgIcon, theme, Typography } from '../../../style'
 // component
 import { Container, Header, Page, Spinner } from '../../../components'
 // redux action
-import { deleteSupplier, getSupplier } from '../../../redux/actions/supplierAction'
+import { getSupplier } from '../../../redux/actions/supplierAction'
 import SupplierProductList from '../../../sections/dashboard/supplier/SupplierProductList'
 
 // ----------------------------------------------------------------------
@@ -42,18 +42,8 @@ const UserCard = styled.div`
 export default function SupplierDetail() {
   const supplier = useSelector((state) => state.supplier.detail)
   const dispatch = useDispatch()
-  const navigate = useNavigate()
 
   const { name } = useParams()
-
-  const handleEdit = () => {
-    navigate(`/dashboard/supplier/${supplier.id}/edit`)
-  }
-
-  const handleDelete = () => {
-    dispatch(deleteSupplier(supplier.id))
-    navigate('/dashboard/supplier')
-  }
 
   useEffect(() => {
     dispatch(getSupplier(name))
@@ -64,19 +54,15 @@ export default function SupplierDetail() {
     <Spinner />
   ) : (
     <Page title={`${supplier.name} -`}>
-      <Header title={`${supplier.name}`} goBack>
-        <Stack direction="row" items="center" spacing={8}>
-          <Button onClick={handleEdit} startIcon="edit" text="Edit" variant="outline" />
-          <Button
-            onClick={handleDelete}
-            startIcon="trash"
-            text="Delete"
-            variant="outline"
-            color={theme.color.red.main}
-          />
-        </Stack>
-      </Header>
-      <Container sx={{ margin: '16px 0' }}>
+      <Header title={`${supplier.name}`} goBack />
+      <Container
+        sx={{
+          padding: '0 16px 80px',
+          '@media (min-width:576px)': {
+            padding: '0 16px 16px',
+          },
+        }}
+      >
         <Wrapper>
           <UserCard>
             <Card sx={{ position: 'sticky', top: '80px', padding: '48px 24px' }}>

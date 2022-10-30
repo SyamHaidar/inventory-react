@@ -50,14 +50,20 @@ export default function AddButton() {
       />
 
       {open && (
-        <Menu open={isOpen} sx={{ bottom: 48, marginLeft: '-8px', transformOrigin: 'bottom left' }}>
-          <Card
-            sx={{
-              padding: '8px',
-              backgroundColor: `${theme.color.paper}a6!important`,
-              backdropFilter: theme.size.blur,
-            }}
-          >
+        <Menu
+          open={isOpen}
+          sx={{
+            bottom: 48,
+            marginLeft: '-8px',
+            transformOrigin: 'bottom left',
+            '@media (max-width:576px)': {
+              right: 0,
+              marginRight: '-8px',
+              transformOrigin: 'bottom right',
+            },
+          }}
+        >
+          <Card sx={{ padding: '8px' }}>
             <Stack direction="column" spacing={8}>
               {ADD_BUTTON.map((item) => (
                 <Button

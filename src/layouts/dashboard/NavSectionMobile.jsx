@@ -1,7 +1,10 @@
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 // style
-import { AnimateScaleY, AnimateZoom, SvgIcon, theme } from '../../style'
+import { SvgIcon, theme } from '../../style'
+// component
+import AddButton from './AddButton'
 
 // ----------------------------------------------------------------------
 
@@ -14,11 +17,10 @@ const Item = styled.div`
     background-color: ${theme.color.light};
     color: ${theme.color.text.primary};
     transition: 0.3s;
-
   }
 
   &.active > :first-child {
-    background-color: ${theme.color.brand.main}29;
+    background-color: ${theme.color.brand.main}14;
     color: ${theme.color.brand.main};
     transition: 0.3s;
   }
@@ -35,6 +37,8 @@ const Wrapper = styled.div`
 // ----------------------------------------------------------------------
 
 export default function NavSectionMobile() {
+  const auth = useSelector((state) => state.auth.user)
+
   const MENU = [
     { to: '/dashboard', icon: 'element', name: 'Dashboard' },
     { to: '/dashboard/product', icon: 'box', name: 'Product' },
@@ -45,13 +49,24 @@ export default function NavSectionMobile() {
 
   return (
     <>
-      {MENU.map((item) => (
-        <Item key={item.name} as={NavLink} to={item.to} $itemName={item.name} end>
-          <Wrapper>
-            <SvgIcon icon={item.icon} size={20} />
-          </Wrapper>
-        </Item>
-      ))}
+      {MENU.map((item) =>
+        auth.roleId !== 1 ? (
+          item.name !== 'User' && (
+            <Item key={item.name} as={NavLink} to={item.to} $itemName={item.name} end>
+              <Wrapper>
+                <SvgIcon icon={item.icon} size={20} />
+              </Wrapper>
+            </Item>
+          )
+        ) : (
+          <Item key={item.name} as={NavLink} to={item.to} $itemName={item.name} end>
+            <Wrapper>
+              <SvgIcon icon={item.icon} size={20} />
+            </Wrapper>
+          </Item>
+        )
+      )}
+      <AddButton />
     </>
   )
 }

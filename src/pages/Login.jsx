@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 // style
-import { Box, Button, Divider, Grid, Stack, TextField, theme, Typography } from '../style'
+import { Box, Button, Grid, Stack, TextField, theme, Typography } from '../style'
 // component
 import { Footer, Logo, Page } from '../components'
 import { authSignin } from '../redux/actions/authAction'
@@ -24,11 +24,11 @@ export default function Login() {
     setBody({ ...body, [e.target.name]: e.target.value })
   }
 
-  const handleLogin = () => {
-    dispatch(authSignin({ body, navigate }))
+  const handleLogin = async () => {
+    setMessage('')
+    const { payload } = await dispatch(authSignin({ body, navigate }))
+    setMessage(payload.message)
   }
-
-  console.log(auth)
 
   return auth ? (
     <Navigate to="/dashboard" replace={true} />
@@ -53,7 +53,7 @@ export default function Login() {
               },
             }}
           >
-            <Stack direction="column" spacing={32} sx={{ flex: 'auto' }}>
+            <Stack direction="column" justify="center" spacing={32} sx={{ flex: 'auto' }}>
               <Stack direction="column" spacing={24}>
                 <Logo height={40} />
                 <Stack direction="column" spacing={4}>
@@ -64,7 +64,7 @@ export default function Login() {
                     weight="500"
                     variant="primary"
                   />
-                  <Typography as="span" text="Sign in to continue to Waku!" />
+                  <Typography as="span" text="Sign in to continue to Wgs!" />
                 </Stack>
               </Stack>
 
@@ -98,12 +98,6 @@ export default function Login() {
                 size="medium"
                 width
               />
-
-              <Divider text="OR" />
-
-              <Stack direction="column" spacing={16}>
-                <Button text="Login with Google" variant="outline" size="medium" width />
-              </Stack>
             </Stack>
 
             <Footer />
@@ -119,14 +113,19 @@ export default function Login() {
           }}
         >
           <Box
+            as="video"
+            autoPlay
+            loop
+            muted
             sx={{
-              background: 'url(/static/covers/cover_default.jpg) no-repeat',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
               borderRadius: theme.size.rounded.main,
               height: '100%',
+              width: '100%',
+              objectFit: 'cover',
             }}
-          />
+          >
+            <Box as="source" src={'/static/home-video.mp4'} type="video/mp4" />
+          </Box>
         </Box>
       </Grid>
     </Page>

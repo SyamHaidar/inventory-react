@@ -1,8 +1,8 @@
 const BRAND = {
-  main: '#FA4EAB',
+  // main: '#FA4EAB',
   // main: '#F94892',
   // main: '#FF9F29',
-  // main: '#1257ed',
+  main: '#1257ed',
   // main: '#0021ED',
 }
 
@@ -54,8 +54,8 @@ const TEXT_LIGHT = {
 }
 
 const TEXT_DARK = {
-  primary: '#f5f7fe',
-  secondary: '#637381',
+  primary: '#f3f5fe',
+  secondary: '#6f8292',
   disabled: '#212B36',
   contrast: '#ffffff',
 }
@@ -79,9 +79,9 @@ const SHADOW_DARK = {
 }
 
 const light = {
-  light: '#f2f3fe',
-  blur: '#ffffffa6',
-  canvas: '#ffffff',
+  light: '#f0f2fe',
+  blur: '#f7f9fea6',
+  canvas: '#f7f9fe',
   overlay: '#07080ccc',
   scrollbar: '#b6b7ba',
   border: '#dedfe2',
@@ -92,39 +92,40 @@ const light = {
 }
 
 const dark = {
-  light: '#202124',
-  blur: '#000000a6',
-  canvas: '#000000',
+  light: '#2a2b2e',
+  blur: '#16171aa6',
+  canvas: '#16171a',
   overlay: '#07080ccc',
   scrollbar: '#3e3f42',
-  border: '#2a2b2e',
+  border: '#343538',
   contrast: '#ffffff',
-  paper: '#16171a',
+  paper: '#1e1f22',
   text: { ...TEXT_DARK },
   shadow: { ...SHADOW_DARK },
 }
 
-const theme = localStorage.getItem('theme')
+// const theme = localStorage.getItem('theme')
 
 const color =
-  theme === 'dark'
-    ? {
-        brand: { ...BRAND },
-        blue: { ...BLUE },
-        cyan: { ...CYAN },
-        green: { ...GREEN },
-        yellow: { ...YELLOW },
-        red: { ...RED },
-        ...dark,
-      }
-    : {
-        brand: { ...BRAND },
-        blue: { ...BLUE },
-        cyan: { ...CYAN },
-        green: { ...GREEN },
-        yellow: { ...YELLOW },
-        red: { ...RED },
-        ...light,
-      }
+  // theme === 'dark'
+  // ?
+  {
+    brand: { ...BRAND },
+    blue: { ...BLUE },
+    cyan: { ...CYAN },
+    green: { ...GREEN },
+    yellow: { ...YELLOW },
+    red: { ...RED },
+    ...dark,
+  }
+// : {
+// brand: { ...BRAND },
+// blue: { ...BLUE },
+// cyan: { ...CYAN },
+// green: { ...GREEN },
+// yellow: { ...YELLOW },
+// red: { ...RED },
+// ...light,
+// }
 
 export default color

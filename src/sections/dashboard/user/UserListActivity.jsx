@@ -1,27 +1,18 @@
 // style
-import {
-  Checkbox,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  theme,
-  Typography,
-} from '../../../style'
+import { Stack, Table, TableBody, theme } from '../../../style'
 // component
 import { Scrollbar, TableListHead } from '../../../components'
 
 // ----------------------------------------------------------------------
 
 export default function UserListActivity() {
-  const TABLE_HEAD = [{ name: '#' }, { name: 'Date' }]
+  const label = [{ name: 'Activity' }]
 
   return (
     <>
       <Scrollbar>
         <Table>
-          <TableListHead label={TABLE_HEAD} />
+          <TableListHead label={label} />
           <TableBody>
             {/* {UserActivity.map((item, index) => (
               <TableRow hover key={index}>
@@ -42,7 +33,7 @@ export default function UserListActivity() {
         items="center"
         sx={{ borderTop: `1px solid ${theme.color.border}`, padding: '24px' }}
       >
-        <Typography text="Rows per page: 10" size={14} variant="primary" />
+        {/* <Typography text="Rows per page: 10" size={14} variant="primary" /> */}
       </Stack>
     </>
   )

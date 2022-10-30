@@ -1,7 +1,7 @@
+import { Link } from 'react-router-dom'
 // style
 import {
-  Avatar,
-  Checkbox,
+  Box,
   Stack,
   Table,
   TableBody,
@@ -12,24 +12,23 @@ import {
 } from '../../../style'
 // component
 import { Scrollbar, TableListHead } from '../../../components'
-import { Link } from 'react-router-dom'
+// util
+import { initialName } from '../../../utils'
 
 // ----------------------------------------------------------------------
 
 export default function SupplierProductList({ data }) {
-  const TABLE_HEAD = [{ name: '#' }, { name: 'Qty' }]
+  const label = [{ name: 'Product' }]
 
   return (
     <>
       <Scrollbar>
         <Table>
-          <TableListHead label={TABLE_HEAD} />
+          <TableListHead label={label} />
           <TableBody>
-            {data.map((item) => (
+            {data.map((item, index) => (
               <TableRow hover key={item.id}>
-                <TableCell padding="checkbox">
-                  <Checkbox />
-                </TableCell>
+                <TableCell padding="checkbox">{index + 1}</TableCell>
                 <TableCell as="th">
                   <Stack
                     as={Link}
@@ -38,15 +37,25 @@ export default function SupplierProductList({ data }) {
                     items="center"
                     spacing={16}
                   >
-                    <Avatar
-                      src={`/static/products/product_default.jpg`}
-                      alt={`${item.name}'s product picture`}
-                      size={40}
-                    />
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: theme.color.brand.main,
+                        borderRadius: theme.size.rounded.full,
+                        color: theme.color.text.contrast,
+                        height: '40px',
+                        width: '40px',
+                        fontSize: '15px',
+                        fontWeight: '700',
+                      }}
+                    >
+                      <Typography as="h4" text={initialName(item.name)} noWrap />
+                    </Box>
                     <Typography as="div" text={item.name} size={14} variant="primary" noWrap />
                   </Stack>
                 </TableCell>
-                <TableCell>99</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -57,7 +66,7 @@ export default function SupplierProductList({ data }) {
         items="center"
         sx={{ borderTop: `1px solid ${theme.color.border}`, padding: '24px' }}
       >
-        <Typography text="Rows per page: 10" size={14} variant="primary" />
+        {/* <Typography text="Rows per page: 10" size={14} variant="primary" /> */}
       </Stack>
     </>
   )

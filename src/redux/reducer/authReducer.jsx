@@ -9,6 +9,7 @@ const authReducer = createSlice({
     user: '',
     auth: '',
     loading: true,
+    message: '',
   },
   reducers: {},
   extraReducers: {
@@ -19,11 +20,24 @@ const authReducer = createSlice({
       state.loading = false
     },
 
+    [authCheck.rejected]: (state, { payload }) => {
+      state.user = ''
+      state.auth = false
+      state.loading = false
+    },
+
     // ---------- sign in ----------
     [authSignin.fulfilled]: (state, { payload }) => {
       state.user = payload.user
       state.auth = payload.auth
       state.loading = false
+    },
+
+    [authSignin.rejected]: (state, { payload }) => {
+      state.user = payload.user
+      state.auth = payload.auth
+      state.loading = false
+      state.message = payload.message
     },
 
     // ---------- sign out ----------

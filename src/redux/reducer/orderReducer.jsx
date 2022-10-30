@@ -5,6 +5,7 @@ import {
   editOrder,
   getOrder,
   getOrders,
+  searchOrders,
   updateOrder,
 } from '../actions/orderAction'
 
@@ -18,6 +19,11 @@ const OrderReducer = createSlice({
   },
   reducers: {},
   extraReducers: {
+    // ---------- search ----------
+    [searchOrders.fulfilled]: (state, { payload }) => {
+      state.data = payload
+    },
+
     // ---------- get all ----------
     [getOrders.fulfilled]: (state, { payload }) => {
       state.data = payload

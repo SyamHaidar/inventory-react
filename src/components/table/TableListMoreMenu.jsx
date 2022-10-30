@@ -1,15 +1,16 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import OrderModalAdd from '../../sections/dashboard/order/OrderModalAdd'
 // style
 import { Box, Button, Card, IconButton, Stack, theme } from '../../style'
 // component
 import Menu from '../Menu'
+import OrderModalAdd from '../../sections/dashboard/order/OrderModalAdd'
 
 // ----------------------------------------------------------------------
 
-export default function TableListMoreMenu({ id, edit, deleteAction }) {
+export default function TableListMoreMenu({ id, edit, deleteAction, editModal }) {
+  const auth = useSelector((state) => state.auth.user)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -25,9 +26,12 @@ export default function TableListMoreMenu({ id, edit, deleteAction }) {
 
   // handle edit data
   const handleEdit = () => {
-    setIsEdit(true)
-    setOpenOrder(true)
-    // navigate(`/dashboard/${edit}/${id}/edit`)
+    if (editModal) {
+      setIsEdit(true)
+      setOpenOrder(true)
+    } else {
+      navigate(`/dashboard/${edit}/${id}/edit`)
+    }
   }
 
   // handle delete data
@@ -45,7 +49,7 @@ export default function TableListMoreMenu({ id, edit, deleteAction }) {
         alignItems: 'center',
       }}
     >
-      <IconButton onClick={isOpen} icon="more" size="medium" />
+      <IconButton onClick={isOpen} icon="more" sx={{ color: theme.color.text.secondary }} />
 
       {open && (
         <Menu
@@ -62,8 +66,9 @@ export default function TableListMoreMenu({ id, edit, deleteAction }) {
         >
           <Card
             sx={{
-              padding: '8px',
+              padding: '4px',
               backgroundColor: `${theme.color.canvas}!important`,
+              backdropFilter: theme.size.blur,
               borderRadius: `${theme.size.rounded.full}!important`,
             }}
           >
@@ -74,13 +79,15 @@ export default function TableListMoreMenu({ id, edit, deleteAction }) {
                 startIcon="edit"
                 sx={{ justifyContent: 'left!important' }}
               />
-              <Button
-                onClick={handleDelete}
-                text="Delete"
-                startIcon="trash"
-                color={theme.color.red.main}
-                sx={{ justifyContent: 'left!important' }}
-              />
+              {auth.roleId === 1 && id !== auth.id && (
+                <Button
+                  onClick={handleDelete}
+                  text="Delete"
+                  startIcon="trash"
+                  color={theme.color.red.main}
+                  sx={{ justifyContent: 'left!important' }}
+                />
+              )}
               <IconButton onClick={isOpen} icon="close" />
             </Stack>
           </Card>

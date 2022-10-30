@@ -34,6 +34,9 @@ const Button = styled(Style)`
           background-color: ${theme.color.light};
           border: 1px solid ${theme.color.light};
           color: ${theme.color.text.primary};
+          &:hover {
+            background-color: ${theme.color.light}99;
+          }
         `
       case 'outline':
         return css`

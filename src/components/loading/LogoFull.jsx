@@ -5,16 +5,14 @@ import Logo from '../Logo'
 // ----------------------------------------------------------------------
 
 const Animate = keyframes`
-  0% {
-    opacity: .5;
+  from {
+    opacity: 0;
+    transform: scale(1.2);
   }
 
-  50% {
+  to {
     opacity: 1;
-  }
-  
-  100% {
-    opacity: .5;
+    transform: scale(1);
   }
 `
 
@@ -27,7 +25,7 @@ const Wrapper = styled(Box)`
   overflow: hidden;
 
   & > :first-child {
-    animation: ${Animate} 1s linear infinite;
+    animation: ${Animate} 0.3s ease-out;
   }
 `
 
@@ -36,7 +34,7 @@ const Wrapper = styled(Box)`
 export default function LogoFull() {
   return (
     <Wrapper>
-      <Logo height={52} />
+      <Logo height={80} />
     </Wrapper>
   )
 }

@@ -26,6 +26,7 @@ const Modal = styled(Style)`
 
           /* Small screen <= 576px */
           @media (max-width: 576px) {
+            max-width: 100%;
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
           }

@@ -5,7 +5,7 @@ import theme from './theme'
 
 export const RootStyle = createGlobalStyle`
   :root {
-    --font-sans-serif: Public Sans, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    --font-sans-serif: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI',
         Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     --font-monospace: Cascadia Mono, SFMono-Regular, Menlo, Monaco, Consolas,
         'Liberation Mono', 'Courier New', monospace;

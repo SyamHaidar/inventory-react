@@ -6,6 +6,7 @@ import {
   getProducts,
   editProduct,
   updateProduct,
+  searchProducts,
 } from '../actions/productAction'
 
 // -------------------------------------------------------------------------
@@ -18,6 +19,11 @@ const productReducer = createSlice({
   },
   reducers: {},
   extraReducers: {
+    // ---------- search ----------
+    [searchProducts.fulfilled]: (state, { payload }) => {
+      state.data = payload
+    },
+
     // ---------- get all ----------
     [getProducts.fulfilled]: (state, { payload }) => {
       state.data = payload

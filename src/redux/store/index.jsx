@@ -7,6 +7,7 @@ import productReducer from '../reducer/productReducer'
 import supplierReducer from '../reducer/supplierReducer'
 import orderReducer from '../reducer/orderReducer'
 import userReducer from '../reducer/userReducer'
+import logReducer from '../reducer/logReducer'
 
 // -------------------------------------------------------------------------
 
@@ -17,5 +18,6 @@ export const store = configureStore({
     supplier: supplierReducer,
     order: orderReducer,
     user: userReducer,
+    log: logReducer,
   },
 })

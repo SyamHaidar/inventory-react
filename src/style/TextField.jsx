@@ -95,7 +95,8 @@ const Fieldset = styled.fieldset`
   }
 
   ${Input}:focus ~ &&, 
-  ${Input}:not([value='']) ~ && {
+  ${Input}:not([value='']) ~ &&,
+  ${Input}[type='date'] ~ && {
     ${Legend} {
       visibility: visible;
       max-width: 100%;

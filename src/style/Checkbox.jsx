@@ -17,7 +17,7 @@ const Checkbox = styled(Style)`
   appearance: none;
   text-decoration: none;
   padding: 9px;
-  color: ${(props) => props.$color || 'currentcolor'};
+  color: ${(props) => props.$color || theme.color.text.secondary};
 `
 const Input = styled.input`
   cursor: inherit;

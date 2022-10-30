@@ -91,7 +91,6 @@ export default function SupplierModalAdd({ open, isOpen }) {
                 onChange={field.onChange}
               />
             ))}
-            <button hidden />
           </Stack>
         </FormModalAdd>
       )}

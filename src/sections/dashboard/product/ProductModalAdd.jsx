@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 // style
-import { Button, Stack, TextField } from '../../../style'
+import { Stack, TextField, theme, Typography } from '../../../style'
 // component
 import { FormModalAdd, Spinner } from '../../../components'
 // redux action
@@ -20,9 +20,14 @@ export default function ProductModalAdd({ open, isOpen }) {
   const [name, setName] = useState('')
   const [supplierId, setSupplierId] = useState('')
   const [supplierName, setSupplierName] = useState('Choose supplier')
-  const [category, setCategory] = useState('')
+  const [category, setCategory] = useState([])
 
-  const body = { name: name, supplier: supplierName, supplierId: supplierId, category: category }
+  const body = {
+    name: name,
+    supplier: supplierName,
+    supplierId: supplierId,
+    category: category,
+  }
 
   // sort data by name
   const newSupplier = [...supplier]
@@ -49,8 +54,8 @@ export default function ProductModalAdd({ open, isOpen }) {
     // clear state & close modal
     setName('')
     setSupplierId('')
-    setSupplierName('')
-    setCategory('')
+    setSupplierName('Choose supplier')
+    setCategory([])
     isOpen()
   }
 
@@ -96,7 +101,6 @@ export default function ProductModalAdd({ open, isOpen }) {
               value={category}
               onChange={(e) => setCategory(e.target.value.replace(/[^a-z 0-9,]/gi, '').split(','))}
             />
-            <button hidden />
           </Stack>
         </FormModalAdd>
       )}
@@ -115,21 +119,26 @@ export default function ProductModalAdd({ open, isOpen }) {
           ) : (
             <Stack direction="column" spacing={4}>
               {supplierData.map((supplier) => (
-                <Button
+                <Stack
                   key={supplier.id}
-                  text={supplier.name}
-                  size="medium"
+                  direction="column"
+                  spacing={2}
                   onClick={() => {
                     setSupplierId(supplier.id)
                     setSupplierName(supplier.name)
                     isOpenSupplier()
                   }}
                   sx={{
-                    justifyContent: 'left!important',
-                    borderRadius: '0!important',
-                    padding: '0 24px!important',
+                    padding: '8px 24px',
+                    '&:hover': {
+                      backgroundColor: `${theme.color.light}99`,
+                      cursor: 'pointer',
+                    },
                   }}
-                />
+                >
+                  <Typography text={supplier.name} size={14} weight="500" variant="primary" />
+                  <Typography text={`${supplier.address}, ${supplier.location}`} size={12} />
+                </Stack>
               ))}
             </Stack>
           )}

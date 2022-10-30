@@ -6,10 +6,8 @@ import moment from 'moment'
 import {
   Avatar,
   Box,
-  Button,
   Card,
   Grid,
-  IconButton,
   Stack,
   Table,
   TableBody,
@@ -26,6 +24,30 @@ import { getOrder } from '../../../redux/actions/orderAction'
 
 // ----------------------------------------------------------------------
 
+const InvoiceWGS = () => (
+  <>
+    <Typography text="Walden Global Services (WGS)" size={14} variant="primary" />
+    <Typography
+      text="Jl. Soekarno Hatta No.104, Kota Bandung, Jawa Barat 40223"
+      size={14}
+      variant="primary"
+    />
+    <Typography text="0226034882" size={14} variant="primary" />
+  </>
+)
+
+const InvoiceOther = ({ order }) => (
+  <>
+    <Typography text={order.supplier.name} size={14} variant="primary" />
+    <Typography
+      text={`${order.supplier.address}, ${order.supplier.location}`}
+      size={14}
+      variant="primary"
+    />
+    <Typography text={order.supplier.mobile} size={14} variant="primary" />
+  </>
+)
+
 export default function OrderDetail() {
   const order = useSelector((state) => state.order.detail)
   const dispatch = useDispatch()
@@ -40,15 +62,16 @@ export default function OrderDetail() {
   return !order ? (
     <Spinner />
   ) : (
-    <Page title="Order detail -">
-      <Header title="Order Detail" goBack>
-        {/* <Stack direction="row" items="center" spacing={8}>
-          <IconButton icon="eye" size="medium" />
-          <IconButton icon="download" size="medium" />
-          <Button startIcon="tick" text="Done" variant="outline" />
-        </Stack> */}
-      </Header>
-      <Container sx={{ margin: '16px 0' }}>
+    <Page title="Invoice -">
+      <Header title="Invoice" goBack />
+      <Container
+        sx={{
+          padding: '0 16px 80px',
+          '@media (min-width:576px)': {
+            padding: '0 16px 16px',
+          },
+        }}
+      >
         <Card sx={{ padding: '32px' }}>
           <Stack direction="column" spacing={40}>
             <Grid>
@@ -57,20 +80,23 @@ export default function OrderDetail() {
               </Box>
               <Stack direction="column" sx={{ marginBottom: '40px' }}>
                 <Typography
-                  text={order.status ? 'Order In' : 'Order Out'}
-                  size={14}
+                  text={order.status ? 'IN' : 'OUT'}
                   weight="700"
                   sx={{
-                    padding: '2px 8px',
+                    display: 'inline-flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '24px',
+                    width: '52px',
+                    borderRadius: theme.size.rounded.small,
+                    textTransform: 'uppercase',
                     backgroundColor:
                       (order.status === true && `${theme.color.green.main}14`) ||
                       (order.status === false && `${theme.color.red.main}14`),
                     color:
                       (order.status === true && `${theme.color.green.main}`) ||
                       (order.status === false && `${theme.color.red.main}`),
-                    borderRadius: theme.size.rounded.small,
                     margin: '0 auto 8px 0',
-                    textTransform: 'uppercase',
                     '@media (min-width:768px)': {
                       margin: '0 0 8px auto',
                     },
@@ -94,13 +120,7 @@ export default function OrderDetail() {
                   weight="700"
                   sx={{ marginBottom: '16px' }}
                 />
-                <Typography text="Walden Global Services (WGS)" size={14} variant="primary" />
-                <Typography
-                  text="Jl. Soekarno Hatta No.104, Kota Bandung, Jawa Barat 40223"
-                  size={14}
-                  variant="primary"
-                />
-                <Typography text="0226034882" size={14} variant="primary" />
+                {!order.status ? <InvoiceWGS /> : <InvoiceOther order={order} />}
               </Stack>
               <Stack direction="column" sx={{ marginBottom: '40px' }}>
                 <Typography
@@ -109,13 +129,7 @@ export default function OrderDetail() {
                   weight="700"
                   sx={{ marginBottom: '16px' }}
                 />
-                <Typography text={order.supplier.name} size={14} variant="primary" />
-                <Typography
-                  text={`${order.supplier.address}, ${order.supplier.location}`}
-                  size={14}
-                  variant="primary"
-                />
-                <Typography text={order.supplier.mobile} size={14} variant="primary" />
+                {order.status ? <InvoiceWGS /> : <InvoiceOther order={order} />}
               </Stack>
               <Stack direction="column" sx={{ marginBottom: '40px' }}>
                 <Typography
@@ -199,7 +213,7 @@ export default function OrderDetail() {
               </Box>
               <Box sx={{ textAlign: 'right' }}>
                 <Typography text={`Help & Question`} size={14} weight="700" variant="primary" />
-                <Typography as="p" text="care@waku.com" size={14} variant="primary" />
+                <Typography as="p" text="care@wgs.co.id" size={14} variant="primary" />
               </Box>
             </Grid>
           </Stack>

@@ -5,6 +5,19 @@ import { clientAPI as api } from '../../services/clientAPI'
 
 const ROUTE = '/product'
 
+// get all search product data
+export const searchProducts = createAsyncThunk(
+  'product/searchProducts',
+  async (name, { rejectWithValue }) => {
+    try {
+      const { data } = await api.get(ROUTE + `/search?name=${name}`)
+      return data
+    } catch (err) {
+      return rejectWithValue(err.response.data)
+    }
+  }
+)
+
 // get all product data
 export const getProducts = createAsyncThunk(
   'product/getProducts',
@@ -24,7 +37,6 @@ export const getProduct = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const { data } = await api.get(ROUTE + `/${id}`)
-      console.log(data)
       return data
     } catch (err) {
       return rejectWithValue(err.response.data)

@@ -6,6 +6,7 @@ import {
   editUser,
   updateUser,
   deleteUser,
+  searchUsers,
 } from '../actions/userAction'
 
 // -------------------------------------------------------------------------
@@ -18,6 +19,11 @@ const userReducer = createSlice({
   },
   reducers: {},
   extraReducers: {
+    // ---------- search ----------
+    [searchUsers.fulfilled]: (state, { payload }) => {
+      state.data = payload
+    },
+
     // ---------- get all ----------
     [getUsers.fulfilled]: (state, { payload }) => {
       state.data = payload

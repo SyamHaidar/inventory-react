@@ -72,7 +72,6 @@ export default function UserModalAdd({ open, isOpen }) {
                 onChange={field.onChange}
               />
             ))}
-            <button hidden />
           </Stack>
         </FormModalAdd>
       )}

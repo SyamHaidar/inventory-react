@@ -19,7 +19,7 @@ const Wrapper = styled(Box)`
 
 // ----------------------------------------------------------------------
 
-export default function Spinner({ height }) {
+export default function Spinner({ height, sx }) {
   return (
     <Wrapper $height={height && `${height}px`}>
       <svg role="loading" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
