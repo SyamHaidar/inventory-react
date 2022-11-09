@@ -5,23 +5,10 @@ import { clientAPI as api } from '../../services/clientAPI'
 
 const ROUTE = '/order'
 
-// get all search order data
-export const searchOrders = createAsyncThunk(
-  'order/searchOrders',
-  async (name, { rejectWithValue }) => {
-    try {
-      const { data } = await api.get(ROUTE + `/search?name=${name}`)
-      return data
-    } catch (err) {
-      return rejectWithValue(err.response.data)
-    }
-  }
-)
-
 // get all order data
-export const getOrders = createAsyncThunk('order/getOrders', async (arg, { rejectWithValue }) => {
+export const getOrders = createAsyncThunk('order/getOrders', async (args, { rejectWithValue }) => {
   try {
-    const { data } = await api.get(ROUTE)
+    const { data } = await api.get(args ? ROUTE + args : ROUTE)
     return data
   } catch (err) {
     return rejectWithValue(err.response.data)

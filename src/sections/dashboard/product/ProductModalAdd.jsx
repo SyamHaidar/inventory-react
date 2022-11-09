@@ -1,11 +1,16 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 // style
 import { Stack, TextField, theme, Typography } from '../../../style'
 // component
 import { FormModalAdd, Spinner } from '../../../components'
 // redux action
-import { createProduct } from '../../../redux/actions/productAction'
+import {
+  createProduct,
+  editProduct,
+  getProducts,
+  updateProduct,
+} from '../../../redux/actions/productAction'
 import { getSuppliers } from '../../../redux/actions/supplierAction'
 //
 import SupplierModalAdd from '../supplier/SupplierModalAdd'
@@ -13,8 +18,8 @@ import SelectList from '../SelectList'
 
 // ----------------------------------------------------------------------
 
-export default function ProductModalAdd({ open, isOpen }) {
-  const supplier = useSelector((state) => state.supplier.data)
+export default function ProductModalAdd({ id, open, isOpen, isEdit }) {
+  const supplier = useSelector((state) => state.supplier)
   const dispatch = useDispatch()
 
   const [name, setName] = useState('')
@@ -30,8 +35,8 @@ export default function ProductModalAdd({ open, isOpen }) {
   }
 
   // sort data by name
-  const newSupplier = [...supplier]
-  const supplierData = newSupplier.sort((a, b) => a.name.localeCompare(b.name))
+  // const newSupplier = [...supplier]
+  // const supplierData = newSupplier.sort((a, b) => a.name.localeCompare(b.name))
 
   // form modal supplier toggle
   const [openSupplier, setOpenSupplier] = useState(false)
@@ -50,7 +55,12 @@ export default function ProductModalAdd({ open, isOpen }) {
   // handle submit form
   const handleSubmit = async (e) => {
     e.preventDefault()
-    await dispatch(createProduct(body))
+    if (!isEdit) {
+      await dispatch(createProduct(body))
+    } else {
+      await dispatch(updateProduct({ id, body }))
+    }
+    await dispatch(getProducts())
     // clear state & close modal
     setName('')
     setSupplierId('')
@@ -58,6 +68,23 @@ export default function ProductModalAdd({ open, isOpen }) {
     setCategory([])
     isOpen()
   }
+
+  const fetchProduct = async () => {
+    const { payload } = await dispatch(editProduct(id))
+    setName(payload.name)
+    setSupplierId(payload.supplier.id)
+    setSupplierName(payload.supplier.name)
+    setCategory(payload.category.name)
+  }
+
+  console.log(category)
+
+  useEffect(() => {
+    if (isEdit) {
+      fetchProduct()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEdit])
 
   return (
     <>
@@ -109,38 +136,36 @@ export default function ProductModalAdd({ open, isOpen }) {
       {openSupplier && (
         <SelectList
           data={getSuppliers()}
-          open={openSupplier}
-          isOpen={isOpenSupplier}
+          open={isOpenSupplier}
           onAddData={isOpenAddSupplier}
           title="supplier"
         >
-          {!supplierData ? (
+          {supplier.isLoading ? (
             <Spinner height={128} />
           ) : (
-            <Stack direction="column" spacing={4}>
-              {supplierData.map((supplier) => (
-                <Stack
-                  key={supplier.id}
-                  direction="column"
-                  spacing={2}
-                  onClick={() => {
-                    setSupplierId(supplier.id)
-                    setSupplierName(supplier.name)
-                    isOpenSupplier()
-                  }}
-                  sx={{
-                    padding: '8px 24px',
-                    '&:hover': {
-                      backgroundColor: `${theme.color.light}99`,
-                      cursor: 'pointer',
-                    },
-                  }}
-                >
-                  <Typography text={supplier.name} size={14} weight="500" variant="primary" />
-                  <Typography text={`${supplier.address}, ${supplier.location}`} size={12} />
-                </Stack>
-              ))}
-            </Stack>
+            supplier.suppliers.map((supplier) => (
+              <Stack
+                key={supplier.id}
+                direction="column"
+                spacing={2}
+                onClick={() => {
+                  setSupplierId(supplier.id)
+                  setSupplierName(supplier.name)
+                  isOpenSupplier()
+                }}
+                sx={{
+                  padding: '8px 12px',
+                  borderRadius: theme.size.rounded.main,
+                  '&:hover': {
+                    backgroundColor: `${theme.color.light}99`,
+                    cursor: 'pointer',
+                  },
+                }}
+              >
+                <Typography text={supplier.name} size={14} weight="500" variant="primary" />
+                <Typography text={`${supplier.address}, ${supplier.location}`} size={12} />
+              </Stack>
+            ))
           )}
         </SelectList>
       )}

@@ -6,7 +6,6 @@ import {
   getProducts,
   editProduct,
   updateProduct,
-  searchProducts,
 } from '../actions/productAction'
 
 // -------------------------------------------------------------------------
@@ -14,50 +13,80 @@ import {
 const productReducer = createSlice({
   name: 'product',
   initialState: {
-    data: '',
-    detail: '',
+    isLoading: true,
+    error: null,
+    products: [],
+    product: null,
+    startIndex: null,
+    endIndex: null,
+    totalRecords: null,
+    totalPages: null,
+    message: null,
   },
-  reducers: {},
   extraReducers: {
-    // ---------- search ----------
-    [searchProducts.fulfilled]: (state, { payload }) => {
-      state.data = payload
-    },
-
     // ---------- get all ----------
+    [getProducts.pending]: (state, { payload }) => {
+      state.isLoading = true
+    },
     [getProducts.fulfilled]: (state, { payload }) => {
-      state.data = payload
+      state.products = payload.data
+      state.startIndex = payload.startIndex
+      state.endIndex = payload.endIndex
+      state.totalRecords = payload.totalRecords
+      state.totalPages = payload.totalPages
+      state.isLoading = false
+    },
+    [getProducts.rejected]: (state, { payload }) => {
+      state.error = payload.message
     },
 
     // ---------- detail ----------
-    [getProduct.pending]: (state) => {
-      state.detail = ''
+    [getProduct.pending]: (state, { payload }) => {
+      state.product = null
     },
     [getProduct.fulfilled]: (state, { payload }) => {
-      state.detail = payload
+      state.product = payload
+    },
+    [getProduct.rejected]: (state, { payload }) => {
+      state.error = payload.message
     },
 
     // ---------- create ----------
     [createProduct.fulfilled]: (state, { payload }) => {
-      state.data = [...state.data, payload]
+      state.message = null
+    },
+    [createProduct.fulfilled]: (state, { payload }) => {
+      state.message = payload.message
+    },
+    [createProduct.rejected]: (state, { payload }) => {
+      state.error = payload.message
     },
 
     // ---------- edit ----------
     [editProduct.pending]: (state) => {
-      state.detail = ''
+      state.product = null
     },
     [editProduct.fulfilled]: (state, { payload }) => {
-      state.detail = payload
+      state.product = payload
+    },
+    [editProduct.rejected]: (state, { payload }) => {
+      state.error = payload.message
     },
 
     // ---------- update ----------
     [updateProduct.fulfilled]: (state, { payload }) => {
-      state.detail = payload
+      state.message = payload.message
+    },
+    [updateProduct.rejected]: (state, { payload }) => {
+      state.error = payload.message
     },
 
     // ---------- delete ----------
     [deleteProduct.fulfilled]: (state, { payload: id }) => {
-      state.data = state.data.filter((item) => item.id !== id)
+      state.products = state.products.filter((item) => item.id !== id)
+    },
+    [deleteProduct.rejected]: (state, { payload }) => {
+      state.error = payload.message
     },
   },
 })

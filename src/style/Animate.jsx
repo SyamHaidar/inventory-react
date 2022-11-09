@@ -24,6 +24,18 @@ export const AnimateModal = keyframes`
   }
 `
 
+export const AnimateModalRight = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(130%);
+  }
+  
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`
+
 export const AnimateModalBottom = keyframes`
   from {
     opacity: 0;

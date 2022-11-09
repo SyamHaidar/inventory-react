@@ -44,14 +44,14 @@ const Button = styled(Style)`
           color: ${(props) => props.$color || theme.color.text.primary};
           &:hover {
             border: 1px solid ${(props) => props.$color || `${theme.color.boder}`};
-            background-color: ${(props) => props.$color + 14 || `${theme.color.light}99`};
+            background-color: ${(props) => props.$color + 14 || `${theme.color.light}`};
           }
         `
       default:
         return css`
           color: ${(props) => props.$color || theme.color.text.primary};
           &:hover {
-            background-color: ${(props) => props.$color + 14 || `${theme.color.light}99`};
+            background-color: ${(props) => props.$color + 14 || `${theme.color.light}`};
           }
         `
     }

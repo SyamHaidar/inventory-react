@@ -1,19 +1,14 @@
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 // style
-import { Box, SvgIcon, theme } from '../style'
-// redux action
-import { searchProducts } from '../redux/actions/productAction'
-import { searchOrders } from '../redux/actions/orderAction'
+import { Box, Style, SvgIcon, theme } from '../style'
 
 // ----------------------------------------------------------------------
 
-const Input = styled.input`
+const Input = styled(Style)`
   display: block;
   font-size: 14px;
   color: ${theme.color.text.primary};
-  border-radius: ${theme.size.rounded.form};
+  border-radius: ${theme.size.rounded.full};
   background-color: transparent;
   height: ${(props) => props.$size || '40px'};
   width: 100%;
@@ -27,16 +22,14 @@ const Input = styled.input`
 
 // ----------------------------------------------------------------------
 
-export default function Search({ placeholder = 'Search...', size, sx }) {
-  const dispatch = useDispatch()
-
-  const [search, setSearch] = useState('')
-
-  const handleSearch = async (e) => {
-    e.preventDefault()
-    await dispatch(searchOrders(search))
-  }
-
+export default function Search({
+  placeholder = 'Search...',
+  keyword,
+  setKeyword,
+  onSearch,
+  size,
+  sx,
+}) {
   return (
     <Box sx={{ display: 'block', width: '100%' }}>
       <Box sx={{ position: 'relative', width: '100%' }}>
@@ -55,14 +48,15 @@ export default function Search({ placeholder = 'Search...', size, sx }) {
           <SvgIcon icon="search" />
         </Box>
 
-        <form onSubmit={handleSearch}>
+        <form onSubmit={onSearch}>
           <Input
+            as="input"
             type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
             placeholder={placeholder}
             $size={size && `${size}px`}
-            sx={sx}
+            $sx={sx}
           />
           <button type="submit" hidden />
         </form>

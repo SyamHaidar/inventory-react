@@ -49,7 +49,7 @@ const InvoiceOther = ({ order }) => (
 )
 
 export default function OrderDetail() {
-  const order = useSelector((state) => state.order.detail)
+  const { order } = useSelector((state) => state.order)
   const dispatch = useDispatch()
 
   const { invoice } = useParams()
@@ -65,12 +65,7 @@ export default function OrderDetail() {
     <Page title="Invoice -">
       <Header title="Invoice" goBack />
       <Container
-        sx={{
-          padding: '0 16px 80px',
-          '@media (min-width:576px)': {
-            padding: '0 16px 16px',
-          },
-        }}
+        sx={{ padding: '0 16px 80px', '@media (min-width:576px)': { padding: '0 16px 16px' } }}
       >
         <Card sx={{ padding: '32px' }}>
           <Stack direction="column" spacing={40}>
@@ -114,21 +109,11 @@ export default function OrderDetail() {
                 />
               </Stack>
               <Stack direction="column" sx={{ marginBottom: '40px' }}>
-                <Typography
-                  text="INVOICE FROM"
-                  size={12}
-                  weight="700"
-                  sx={{ marginBottom: '16px' }}
-                />
+                <Typography text="FROM" size={12} weight="700" sx={{ marginBottom: '16px' }} />
                 {!order.status ? <InvoiceWGS /> : <InvoiceOther order={order} />}
               </Stack>
               <Stack direction="column" sx={{ marginBottom: '40px' }}>
-                <Typography
-                  text="INVOICE TO"
-                  size={12}
-                  weight="700"
-                  sx={{ marginBottom: '16px' }}
-                />
+                <Typography text="TO" size={12} weight="700" sx={{ marginBottom: '16px' }} />
                 {order.status ? <InvoiceWGS /> : <InvoiceOther order={order} />}
               </Stack>
               <Stack direction="column" sx={{ marginBottom: '40px' }}>
@@ -213,7 +198,7 @@ export default function OrderDetail() {
               </Box>
               <Box sx={{ textAlign: 'right' }}>
                 <Typography text={`Help & Question`} size={14} weight="700" variant="primary" />
-                <Typography as="p" text="care@wgs.co.id" size={14} variant="primary" />
+                <Typography as="p" text="care@myinven.io" size={14} variant="primary" />
               </Box>
             </Grid>
           </Stack>

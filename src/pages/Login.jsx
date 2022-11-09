@@ -64,7 +64,7 @@ export default function Login() {
                     weight="500"
                     variant="primary"
                   />
-                  <Typography as="span" text="Sign in to continue to Wgs!" />
+                  <Typography as="span" text="Sign in to continue to MyInven!" />
                 </Stack>
               </Stack>
 

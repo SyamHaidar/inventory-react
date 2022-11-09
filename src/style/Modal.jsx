@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components/macro'
-import { AnimateModal, AnimateModalBottom } from './Animate'
+import { AnimateModal, AnimateModalBottom, AnimateModalRight } from './Animate'
 import Style from './Style'
 import theme from './theme'
 
@@ -13,6 +13,28 @@ const Modal = styled(Style)`
   /* Position Props */
   ${(props) => {
     switch (props.$position) {
+      case 'right':
+        return css`
+          height: 100vh;
+          width: 400px;
+          animation: ${AnimateModalRight} 0.3s ease-out;
+
+          /* Small screen >= 576px */
+          @media (min-width: 576px) {
+            right: 0;
+          }
+
+          /* Small screen <= 576px */
+          @media (max-width: 576px) {
+            bottom: 0;
+            height: 100%;
+            max-height: calc(100% - 40px);
+            width: 100%;
+            border-top-left-radius: ${theme.size.rounded.main};
+            border-top-right-radius: ${theme.size.rounded.main};
+            animation: ${AnimateModalBottom} 0.15s ease-out;
+          }
+        `
       case 'bottom':
         return css`
           bottom: 0;

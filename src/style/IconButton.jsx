@@ -29,6 +29,9 @@ const IconButton = styled(Style)`
         return css`
           background-color: ${theme.color.light};
           border: 1px solid ${theme.color.light};
+          &:hover {
+            background-color: ${theme.color.light}99;
+          }
         `
       case 'outline':
         return css`
@@ -36,14 +39,14 @@ const IconButton = styled(Style)`
           color: ${(props) => props.$color};
           &:hover {
             border: 1px solid ${(props) => props.$color || `${theme.color.boder}`};
-            background-color: ${(props) => props.$color + 14 || `${theme.color.light}99`};
+            background-color: ${(props) => props.$color + 14 || `${theme.color.light}`};
           }
         `
       default:
         return css`
-          color: ${(props) => props.$color};
+          color: ${(props) => props.$color || 'currenctColor'};
           &:hover {
-            background-color: ${(props) => props.$color + 14 || `${theme.color.light}99`};
+            background-color: ${(props) => props.$color + 14 || `${theme.color.light}`};
           }
         `
     }
@@ -74,6 +77,11 @@ const IconButton = styled(Style)`
         `
     }
   }}
+
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
 `
 
 // ----------------------------------------------------------------------

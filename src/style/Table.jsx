@@ -6,9 +6,8 @@ import { Style, theme } from '.'
 const Table = styled(Style)`
   display: table;
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
   border-spacing: 0;
-  padding: 12px;
 `
 
 const TableHead = styled(Style)`
@@ -44,17 +43,25 @@ const TableCell = styled(Style)`
         `
       case 'checkbox':
         return css`
-          padding: 0 0 0 24px;
+          padding: 0 0 0 16px;
           width: 48px;
         `
       case 'more':
         return css`
-          padding: 0 24px 0 0;
+          padding: 0 16px 0 0;
           width: 48px;
         `
       default:
         return css`
-          padding: 16px;
+          padding: 10px;
+
+          :first-child {
+            padding: 10px 10px 10px 16px;
+          }
+
+          :last-child {
+            padding: 10px 16px 10px 10px;
+          }
         `
     }
   }}

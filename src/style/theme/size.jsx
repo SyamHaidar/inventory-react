@@ -6,9 +6,9 @@ const BUTTON = {
 }
 
 const ROUNDED = {
-  main: '20px',
+  main: '12px',
+  form: '10px',
   small: '6px',
-  form: '8px',
   full: '9999px',
 }
 

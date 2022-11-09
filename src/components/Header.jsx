@@ -1,9 +1,9 @@
-import { Link, useNavigate } from 'react-router-dom'
-import NavAccount from '../layouts/dashboard/NavAccount'
+import { useNavigate } from 'react-router-dom'
 // style
 import { BackDrop, IconButton, Stack, Sticky, Typography } from '../style'
 //
 import Container from './Container'
+import NavAccount from '../layouts/dashboard/NavAccount'
 
 // ----------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ export default function Header({ title, goBack = false, height }) {
               />
             </Stack>
             <Stack direction="row" items="center" spacing={12}>
-              <IconButton as={Link} to={'/dashboard/log'} icon="log" size="medium" />
+              {/* <IconButton icon="notification" size="medium" /> */}
               <NavAccount />
             </Stack>
           </Stack>

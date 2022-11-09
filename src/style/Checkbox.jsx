@@ -16,7 +16,7 @@ const Checkbox = styled(Style)`
   vertical-align: middle;
   appearance: none;
   text-decoration: none;
-  padding: 9px;
+  padding: 8px;
   color: ${(props) => props.$color || theme.color.text.secondary};
 `
 const Input = styled.input`
@@ -35,20 +35,19 @@ const Input = styled.input`
 // ----------------------------------------------------------------------
 
 export default function CheckboxStyle({ checked, onChange, sx, ...other }) {
+  // const defaultChecked = checked ? checked : false
   const [isChecked, setIsChecked] = useState(false)
-
-  const handleCheck = () => {
-    setIsChecked(!isChecked)
-  }
+  const handleCheck = () => setIsChecked(!isChecked)
 
   return (
-    <Checkbox $color={isChecked && theme.color.brand.main} $sx={sx} {...other}>
+    <Checkbox $color={checked && theme.color.brand.main} $sx={sx}>
       <Input
         type="checkbox"
         checked={checked ? checked : isChecked}
         onChange={onChange ? onChange : handleCheck}
+        {...other}
       />
-      <SvgIconStyle icon={isChecked ? 'check-box' : 'check-box-blank'} size={20} />
+      <SvgIconStyle icon={checked ? 'check-box' : 'check-box-blank'} size={20} />
     </Checkbox>
   )
 }

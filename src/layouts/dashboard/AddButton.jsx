@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
 // style
 import { Box, Button, Card, IconButton, Stack, theme } from '../../style'
 // component
@@ -11,6 +12,8 @@ import OrderModalAdd from '../../sections/dashboard/order/OrderModalAdd'
 
 // ----------------------------------------------------------------------
 export default function AddButton() {
+  const auth = useSelector((state) => state.auth.user)
+
   // add toggle
   const [open, setOpen] = useState(false)
   const isOpen = () => setOpen(!open)
@@ -32,11 +35,17 @@ export default function AddButton() {
   const isOpenUser = () => setOpenUser(!openUser)
 
   // button list
-  const ADD_BUTTON = [
+  const ADD_BUTTON_1 = [
     { icon: 'box', text: 'Add Product', onClick: isOpenProduct },
     { icon: 'receipt', text: 'Add Order', onClick: isOpenOrder },
     { icon: 'truck', text: 'Add Supplier', onClick: isOpenSupplier },
     { icon: 'users', text: 'Add User', onClick: isOpenUser },
+  ]
+
+  const ADD_BUTTON_2 = [
+    { icon: 'box', text: 'Add Product', onClick: isOpenProduct },
+    { icon: 'receipt', text: 'Add Order', onClick: isOpenOrder },
+    { icon: 'truck', text: 'Add Supplier', onClick: isOpenSupplier },
   ]
 
   return (
@@ -65,21 +74,37 @@ export default function AddButton() {
         >
           <Card sx={{ padding: '8px' }}>
             <Stack direction="column" spacing={8}>
-              {ADD_BUTTON.map((item) => (
-                <Button
-                  key={item.text}
-                  onClick={() => {
-                    isOpen()
-                    item.onClick()
-                  }}
-                  startIcon={item.icon}
-                  text={item.text}
-                  sx={{
-                    justifyContent: 'left!important',
-                    padding: '0 16px!important',
-                  }}
-                />
-              ))}
+              {auth.roleId === 1
+                ? ADD_BUTTON_1.map((item) => (
+                    <Button
+                      key={item.text}
+                      onClick={() => {
+                        isOpen()
+                        item.onClick()
+                      }}
+                      startIcon={item.icon}
+                      text={item.text}
+                      sx={{
+                        justifyContent: 'left!important',
+                        padding: '0 16px!important',
+                      }}
+                    />
+                  ))
+                : ADD_BUTTON_2.map((item) => (
+                    <Button
+                      key={item.text}
+                      onClick={() => {
+                        isOpen()
+                        item.onClick()
+                      }}
+                      startIcon={item.icon}
+                      text={item.text}
+                      sx={{
+                        justifyContent: 'left!important',
+                        padding: '0 16px!important',
+                      }}
+                    />
+                  ))}
             </Stack>
           </Card>
         </Menu>

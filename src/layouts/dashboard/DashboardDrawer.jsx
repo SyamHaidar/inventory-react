@@ -52,11 +52,7 @@ export default function DashboardDrawer() {
           bottom: 0,
           display: 'block',
           width: '100%',
-          padding: '12px',
-          // backgroundColor: theme.color.canvas,
-          // borderTopLeftRadius: theme.size.rounded.main,
-          // borderTopRightRadius: theme.size.rounded.main,
-          // boxShadow: theme.color.shadow.top,
+          padding: '0 12px',
           backgroundColor: theme.color.blur,
           backdropFilter: theme.size.blur,
           zIndex: 10,
@@ -65,7 +61,7 @@ export default function DashboardDrawer() {
           },
         }}
       >
-        <Stack direction="row" justify="space-around" items="center">
+        <Stack direction="row" justify="space-around" items="center" sx={{ height: '64px' }}>
           <NavSectionMobile />
         </Stack>
       </Box>

@@ -1,23 +1,31 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { searchLogs, getLogs } from '../actions/logAction'
+import { getLogs } from '../actions/logAction'
 
 // -------------------------------------------------------------------------
 
 const logReducer = createSlice({
   name: 'log',
   initialState: {
-    data: '',
+    isLoading: true,
+    error: null,
+    logs: [],
+    startIndex: null,
+    endIndex: null,
+    totalRecords: null,
+    totalPages: null,
   },
-  reducers: {},
   extraReducers: {
-    // ---------- search ----------
-    [searchLogs.fulfilled]: (state, { payload }) => {
-      state.data = payload
-    },
-
     // ---------- get all ----------
+    [getLogs.pending]: (state, { payload }) => {
+      state.isLoading = true
+    },
     [getLogs.fulfilled]: (state, { payload }) => {
-      state.data = payload
+      state.logs = payload.data
+      state.startIndex = payload.startIndex
+      state.endIndex = payload.endIndex
+      state.totalRecords = payload.totalRecords
+      state.totalPages = payload.totalPages
+      state.isLoading = false
     },
   },
 })

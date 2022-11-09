@@ -27,7 +27,7 @@ const Item = styled.div`
       backdrop-filter: ${theme.size.blur};
       color: ${theme.color.text.primary};
       box-shadow: ${theme.color.shadow.main};
-      border-radius: ${theme.size.rounded.full};
+      border-radius: ${theme.size.rounded.small};
       animation: ${AnimateZoom} 0.3s ease-out;
       transform-origin: left;
     }
@@ -65,33 +65,39 @@ const Wrapper = styled.div`
 export default function NavSection() {
   const auth = useSelector((state) => state.auth.user)
 
-  const MENU = [
+  const MENU_1 = [
     { to: '/dashboard', icon: 'element', name: 'Dashboard' },
     { to: '/dashboard/product', icon: 'box', name: 'Product' },
     { to: '/dashboard/order', icon: 'receipt', name: 'Order' },
     { to: '/dashboard/supplier', icon: 'truck', name: 'Supplier' },
     { to: '/dashboard/user', icon: 'users', name: 'User' },
+    { to: '/dashboard/log', icon: 'log', name: 'Log' },
+  ]
+
+  const MENU_2 = [
+    { to: '/dashboard', icon: 'element', name: 'Dashboard' },
+    { to: '/dashboard/product', icon: 'box', name: 'Product' },
+    { to: '/dashboard/order', icon: 'receipt', name: 'Order' },
+    { to: '/dashboard/supplier', icon: 'truck', name: 'Supplier' },
   ]
 
   return (
     <>
-      {MENU.map((item) =>
-        auth.roleId !== 1 ? (
-          item.name !== 'User' && (
+      {auth.roleId === 1
+        ? MENU_1.map((item) => (
             <Item key={item.name} as={NavLink} to={item.to} $itemName={item.name} end>
               <Wrapper>
                 <SvgIcon icon={item.icon} size={20} />
               </Wrapper>
             </Item>
-          )
-        ) : (
-          <Item key={item.name} as={NavLink} to={item.to} $itemName={item.name} end>
-            <Wrapper>
-              <SvgIcon icon={item.icon} size={20} />
-            </Wrapper>
-          </Item>
-        )
-      )}
+          ))
+        : MENU_2.map((item) => (
+            <Item key={item.name} as={NavLink} to={item.to} $itemName={item.name} end>
+              <Wrapper>
+                <SvgIcon icon={item.icon} size={20} />
+              </Wrapper>
+            </Item>
+          ))}
     </>
   )
 }

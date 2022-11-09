@@ -4,13 +4,10 @@ import DashboardLayout from './layouts/dashboard'
 // page
 import Dashboard from './pages/dashboard/Dashboard'
 import Product from './pages/dashboard/Product'
-import ProductDetail from './pages/dashboard/product/ProductDetail'
 import Order from './pages/dashboard/Order'
 import OrderDetail from './pages/dashboard/order/OrderDetail'
 import Supplier from './pages/dashboard/Supplier'
-import SupplierDetail from './pages/dashboard/supplier/SupplierDetail'
 import User from './pages/dashboard/User'
-import UserDetail from './pages/dashboard/user/UserDetail'
 import UserEdit from './pages/dashboard/user/UserEdit'
 import Log from './pages/dashboard/Log'
 //
@@ -31,10 +28,7 @@ export default function Router() {
         { index: true, element: <Dashboard /> },
         {
           path: 'product',
-          children: [
-            { index: true, element: <Product /> },
-            { path: ':name', element: <ProductDetail /> },
-          ],
+          children: [{ index: true, element: <Product /> }],
         },
         {
           path: 'order',
@@ -47,7 +41,6 @@ export default function Router() {
           path: 'supplier',
           children: [
             { index: true, element: <Supplier /> },
-            { path: ':name', element: <SupplierDetail /> },
             { path: ':id/edit', element: <SupplierEdit /> },
           ],
         },
@@ -55,7 +48,6 @@ export default function Router() {
           path: 'user',
           children: [
             { index: true, element: <User /> },
-            { path: '@:username', element: <UserDetail /> },
             { path: ':id/edit', element: <UserEdit /> },
           ],
         },

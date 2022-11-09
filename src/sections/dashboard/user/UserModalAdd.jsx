@@ -1,54 +1,68 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 // style
-import { Stack, TextField } from '../../../style'
+import { Box, Stack, TextField, theme, Typography } from '../../../style'
 // component
 import { FormModalAdd } from '../../../components'
-// redux component
-import { createUser } from '../../../redux/actions/userAction'
+import SelectList from '../SelectList'
+// redux action
+import { createUser, editUser, getUsers, updateUser } from '../../../redux/actions/userAction'
 
 // ----------------------------------------------------------------------
 
-export default function UserModalAdd({ open, isOpen }) {
+export default function UserModalAdd({ id, open, isOpen, isEdit }) {
   const dispatch = useDispatch()
 
-  const initState = { fullName: '', password: '', roleId: '2' }
-  const [body, setBody] = useState(initState)
+  // const [edit,setEdit] =useState()
+  const [fullName, setFullName] = useState('')
+  const [password, setPassword] = useState('')
+  const [status, setStatus] = useState('')
+  const [statusName, setStatusName] = useState('Select status')
+
+  const body = { fullName: fullName, password: password, roleId: '2', status: status }
+
+  // form modal status toggle
+  const [openStatus, setOpenStatus] = useState(false)
+  const isOpenStatus = () => setOpenStatus(!openStatus)
 
   // disabled button save if data empty
-  const handleSave = !body.fullName || body.password.length < 6
-
-  // handle change body
-  const handleChange = (e, str) => {
-    // str variable is used for input validation
-    setBody({ ...body, [e.target.name]: !str ? e.target.value : e.target.value.replace(str, '') })
-  }
+  const handleSave = !isEdit ? !body.fullName || body.password.length < 6 : !body.fullName
 
   // handle submit form
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    dispatch(createUser(body))
+    if (!isEdit) {
+      await dispatch(createUser(body))
+    } else {
+      await dispatch(updateUser({ id, body }))
+    }
+    await dispatch(getUsers())
     // clear state & close modal
-    setBody(initState)
+    setFullName('')
+    setPassword('')
+    setStatus('')
+    setStatusName('Select status')
     isOpen()
   }
 
-  // input form field
-  const FORM_FIELD = [
-    {
-      label: 'Name',
-      name: 'fullName',
-      type: 'text',
-      value: body.fullName,
-      onChange: (e) => handleChange(e, /[^a-z 0-9]/gi),
-    },
-    {
-      label: 'Password',
-      name: 'password',
-      type: 'password',
-      value: body.password,
-      onChange: (e) => handleChange(e, ''),
-    },
+  const fetchUser = async () => {
+    const { payload } = await dispatch(editUser(id))
+    setFullName(payload.fullName)
+    setStatus(payload.status)
+    setStatusName(payload.status ? 'Active' : 'Nonactive')
+  }
+
+  useEffect(() => {
+    if (isEdit) {
+      fetchUser()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEdit])
+
+  // status user value
+  const selectStatus = [
+    { status: true, name: 'Active', color: 'green' },
+    { status: false, name: 'Nonactive', color: 'yellow' },
   ]
 
   return (
@@ -59,21 +73,80 @@ export default function UserModalAdd({ open, isOpen }) {
           open={isOpen}
           handleSave={handleSave}
           handleSubmit={handleSubmit}
+          isEdit={isEdit}
         >
           <Stack direction="column" spacing={20}>
-            {FORM_FIELD.map((field) => (
+            <TextField
+              label="Full name"
+              name="fullName"
+              type="text"
+              required
+              readOnly={isEdit}
+              disabled={isEdit}
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value.replace(/[^a-z 0-9]/gi, ''))}
+            />
+            {!isEdit && (
               <TextField
-                key={field.name}
-                label={field.label}
-                name={field.name}
-                type={field.type}
+                label="Password"
+                name="password"
+                type="password"
                 required
-                value={field.value}
-                onChange={field.onChange}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
-            ))}
+            )}
+            <TextField
+              onClick={isOpenStatus}
+              label="Status"
+              name="status"
+              type="text"
+              required
+              readOnly
+              value={statusName}
+            />
           </Stack>
         </FormModalAdd>
+      )}
+
+      {/* select status modal */}
+      {openStatus && (
+        <SelectList open={isOpenStatus} title="status">
+          <Stack direction="column" spacing={4}>
+            {selectStatus.map((status, index) => (
+              <Stack
+                key={index}
+                onClick={() => {
+                  setStatus(status.status)
+                  setStatusName(status.name)
+                  isOpenStatus()
+                }}
+                direction="row"
+                items="center"
+                spacing={8}
+                sx={{
+                  padding: '8px 12px',
+                  borderRadius: theme.size.rounded.main,
+                  '&:hover': {
+                    backgroundColor: `${theme.color.light}99`,
+                    cursor: 'pointer',
+                  },
+                }}
+              >
+                <Box
+                  sx={{
+                    backgroundColor: `${theme.color[status.color].main}99`,
+                    borderRadius: theme.size.rounded.full,
+                    height: '8px',
+                    width: '8px',
+                    flexShrink: 0,
+                  }}
+                />
+                <Typography text={status.name} size={14} weight="500" variant="primary" />
+              </Stack>
+            ))}
+          </Stack>
+        </SelectList>
       )}
     </>
   )

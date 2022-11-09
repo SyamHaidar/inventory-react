@@ -6,6 +6,7 @@ export { default as Style } from './Style'
 export {
   AnimateFade,
   AnimateModal,
+  AnimateModalRight,
   AnimateModalBottom,
   AnimateScaleX,
   AnimateScaleY,

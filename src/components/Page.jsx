@@ -8,7 +8,7 @@ export default function Page({ children, title = '' }) {
   return (
     <>
       <Helmet>
-        <title>{`${title} WGS`}</title>
+        <title>{`${title} MyInven.io`}</title>
       </Helmet>
       <Box>{children}</Box>
     </>

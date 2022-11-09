@@ -3,20 +3,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import moment from 'moment'
 // style
-import { Grid, Stack, TextField, theme, Typography } from '../../../style'
+import { Grid, Stack, SvgIcon, TextField, theme, Typography } from '../../../style'
 // component
 import { FormModalAdd, Spinner } from '../../../components'
-import SupplierModalAdd from '../supplier/SupplierModalAdd'
 import ProductModalAdd from '../product/ProductModalAdd'
 import SelectList from '../SelectList'
 // redux action
-import { createOrder, editOrder, updateOrder } from '../../../redux/actions/orderAction'
+import { createOrder, editOrder, getOrders, updateOrder } from '../../../redux/actions/orderAction'
 import { getProducts } from '../../../redux/actions/productAction'
 
 // ----------------------------------------------------------------------
 
-export default function OrderModalAdd({ open, isOpen, isEdit = false, id }) {
-  const product = useSelector((state) => state.product.data)
+export default function OrderModalAdd({ id, open, isOpen, isEdit }) {
+  const product = useSelector((state) => state.product)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -38,7 +37,7 @@ export default function OrderModalAdd({ open, isOpen, isEdit = false, id }) {
   }
 
   // sort data by name
-  const newProduct = [...product]
+  const newProduct = [...product.products]
   const productData = newProduct.sort((a, b) => a.name.localeCompare(b.name))
 
   // form modal product toggle
@@ -52,19 +51,9 @@ export default function OrderModalAdd({ open, isOpen, isEdit = false, id }) {
     isOpenProduct()
   }
 
-  // form modal add supplier toggle
-  const [openAddSupplier, setOpenAddSupplier] = useState(false)
-  const isOpenAddSupplier = () => setOpenAddSupplier(!openAddSupplier)
-
   // form modal status toggle
   const [openStatus, setOpenStatus] = useState(false)
   const isOpenStatus = () => setOpenStatus(!openStatus)
-
-  // status order value
-  const selectStatus = [
-    { status: true, name: 'Order In', color: 'green' },
-    { status: false, name: 'Order Out', color: 'red' },
-  ]
 
   // disabled button save if data empty
   const handleSave = !productId || !date || !quantity
@@ -77,6 +66,7 @@ export default function OrderModalAdd({ open, isOpen, isEdit = false, id }) {
     } else {
       await dispatch(updateOrder({ id, body, navigate }))
     }
+    await dispatch(getOrders())
     // clear state & close modal
     setProductId('')
     setProductName('Select product')
@@ -107,6 +97,12 @@ export default function OrderModalAdd({ open, isOpen, isEdit = false, id }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit])
+
+  // status order value
+  const selectStatus = [
+    { status: true, name: 'Order In', icon: 'arrow-left', color: 'green' },
+    { status: false, name: 'Order Out', icon: 'arrow-right', color: 'red' },
+  ]
 
   return (
     <>
@@ -179,76 +175,91 @@ export default function OrderModalAdd({ open, isOpen, isEdit = false, id }) {
       {openProduct && (
         <SelectList
           data={getProducts()}
-          open={openProduct}
-          isOpen={isOpenProduct}
+          open={isOpenProduct}
           onAddData={isOpenAddProduct}
           title="product"
         >
-          {!product ? (
+          {product.isLoading ? (
             <Spinner height={128} />
           ) : (
-            <Stack direction="column" spacing={4}>
-              {productData.map((product) => (
-                <Stack
-                  key={product.id}
-                  direction="column"
-                  spacing={2}
-                  onClick={() => {
-                    setProductId(product.id)
-                    setProductName(product.name)
-                    setSupplierId(product.supplier.id)
-                    setSupplierName(product.supplier.name)
-                    isOpenProduct()
-                  }}
-                  sx={{
-                    padding: '8px 24px',
-                    '&:hover': {
-                      backgroundColor: `${theme.color.light}99`,
-                      cursor: 'pointer',
-                    },
-                  }}
-                >
-                  <Typography text={product.name} size={14} weight="500" variant="primary" />
-                  <Typography text={product.supplier.name} size={12} />
-                </Stack>
-              ))}
-            </Stack>
+            productData.map((product) => (
+              <Stack
+                key={product.id}
+                direction="column"
+                spacing={2}
+                onClick={() => {
+                  setProductId(product.id)
+                  setProductName(product.name)
+                  setSupplierId(product.supplier.id)
+                  setSupplierName(product.supplier.name)
+                  isOpenProduct()
+                }}
+                sx={{
+                  padding: '8px 12px',
+                  borderRadius: theme.size.rounded.main,
+                  '&:hover': {
+                    backgroundColor: `${theme.color.light}99`,
+                    cursor: 'pointer',
+                  },
+                }}
+              >
+                <Typography text={product.name} size={14} weight="500" variant="primary" />
+                <Typography text={product.supplier.name} size={12} />
+              </Stack>
+            ))
           )}
         </SelectList>
       )}
 
       {/* select status modal */}
       {openStatus && (
-        <SelectList open={openStatus} isOpen={isOpenStatus} title="status">
-          <Stack direction="column" spacing={4}>
-            {selectStatus.map((status) => (
-              <Typography
-                onClick={() => {
-                  setStatus(status.status)
-                  setStatusName(status.name)
-                  isOpenStatus()
-                }}
-                as="div"
-                text={status.name}
-                size={14}
-                weight="500"
-                color={theme.color[status.color].main}
+        <SelectList open={isOpenStatus} title="status">
+          {selectStatus.map((status, index) => (
+            <Stack
+              key={index}
+              onClick={() => {
+                setStatus(status.status)
+                setStatusName(status.name)
+                isOpenStatus()
+              }}
+              direction="row"
+              items="center"
+              spacing={8}
+              sx={{
+                padding: '8px 12px',
+                borderRadius: theme.size.rounded.main,
+                '&:hover': {
+                  backgroundColor: `${theme.color.light}99`,
+                  cursor: 'pointer',
+                },
+              }}
+            >
+              <Stack
+                justify="center"
+                items="center"
                 sx={{
-                  padding: '8px 24px',
-                  '&:hover': {
-                    backgroundColor: `${theme.color.light}99`,
-                    cursor: 'pointer',
-                  },
+                  backgroundColor: `${theme.color[status.color].main}14`,
+                  borderRadius: theme.size.rounded.full,
+                  height: '24px',
+                  width: '24px',
+                  flexShrink: 0,
                 }}
-              />
-            ))}
-          </Stack>
+              >
+                <SvgIcon
+                  icon={status.icon}
+                  size={16}
+                  color={theme.color[status.color].main}
+                  sx={{ transform: 'rotate(-45deg)' }}
+                />
+              </Stack>
+              <Typography text={status.name} size={14} weight="500" variant="primary" />
+            </Stack>
+          ))}
         </SelectList>
       )}
 
       {/* add data modal */}
-      <ProductModalAdd open={openAddProduct} isOpen={isOpenAddProduct} />
-      <SupplierModalAdd open={openAddSupplier} isOpen={isOpenAddSupplier} />
+      {openAddProduct && <ProductModalAdd open={openAddProduct} isOpen={isOpenAddProduct} />}
     </>
   )
 }

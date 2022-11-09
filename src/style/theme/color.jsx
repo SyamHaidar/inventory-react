@@ -47,15 +47,15 @@ const RED = {
 }
 
 const TEXT_LIGHT = {
-  primary: '#212B36',
-  secondary: '#637381',
+  primary: '#0e0e10',
+  secondary: '#6e7780',
   disabled: '#919EAB',
   contrast: '#ffffff',
 }
 
 const TEXT_DARK = {
-  primary: '#f3f5fe',
-  secondary: '#6f8292',
+  primary: '#ffffff',
+  secondary: '#6e7780',
   disabled: '#212B36',
   contrast: '#ffffff',
 }
@@ -92,40 +92,39 @@ const light = {
 }
 
 const dark = {
-  light: '#2a2b2e',
-  blur: '#16171aa6',
-  canvas: '#16171a',
-  overlay: '#07080ccc',
-  scrollbar: '#3e3f42',
-  border: '#343538',
+  light: '#202124',
+  blur: '#0c0d10a6',
+  canvas: '#0c0d10',
+  overlay: '#07080bcc',
+  scrollbar: '#343538',
+  border: '#2a2b2e',
   contrast: '#ffffff',
-  paper: '#1e1f22',
+  paper: '#111215',
   text: { ...TEXT_DARK },
   shadow: { ...SHADOW_DARK },
 }
 
-// const theme = localStorage.getItem('theme')
+const theme = localStorage.getItem('theme')
 
 const color =
-  // theme === 'dark'
-  // ?
-  {
-    brand: { ...BRAND },
-    blue: { ...BLUE },
-    cyan: { ...CYAN },
-    green: { ...GREEN },
-    yellow: { ...YELLOW },
-    red: { ...RED },
-    ...dark,
-  }
-// : {
-// brand: { ...BRAND },
-// blue: { ...BLUE },
-// cyan: { ...CYAN },
-// green: { ...GREEN },
-// yellow: { ...YELLOW },
-// red: { ...RED },
-// ...light,
-// }
+  theme === 'dark'
+    ? {
+        brand: { ...BRAND },
+        blue: { ...BLUE },
+        cyan: { ...CYAN },
+        green: { ...GREEN },
+        yellow: { ...YELLOW },
+        red: { ...RED },
+        ...dark,
+      }
+    : {
+        brand: { ...BRAND },
+        blue: { ...BLUE },
+        cyan: { ...CYAN },
+        green: { ...GREEN },
+        yellow: { ...YELLOW },
+        red: { ...RED },
+        ...light,
+      }
 
 export default color

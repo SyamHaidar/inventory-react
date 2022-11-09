@@ -1,14 +1,14 @@
 // style
-import { Box, TableBody, TableCell, TableRow, theme } from '../../style'
+import { Stack, TableBody, TableCell, TableRow, theme } from '../../style'
 // component
 import Spinner from '../loading/Spinner'
 
 // ----------------------------------------------------------------------
 
-export default function TableListBody({ children, data }) {
+export default function TableListBody({ children, data, loading }) {
   return (
     <TableBody sx={{ color: theme.color.text.primary }}>
-      {!data ? (
+      {loading ? (
         <TableRow>
           <TableCell colSpan="12">
             <Spinner height={128} />
@@ -17,17 +17,9 @@ export default function TableListBody({ children, data }) {
       ) : !data.length ? (
         <TableRow>
           <TableCell colSpan="12">
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                textAlign: 'center',
-                height: '128px',
-              }}
-            >
+            <Stack justify="center" items="center" sx={{ textAlign: 'center', height: '128px' }}>
               No Data
-            </Box>
+            </Stack>
           </TableCell>
         </TableRow>
       ) : (

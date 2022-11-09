@@ -13,45 +13,80 @@ import {
 const supplierReducer = createSlice({
   name: 'supplier',
   initialState: {
-    data: '',
-    detail: '',
+    isLoading: true,
+    error: null,
+    suppliers: [],
+    supplier: null,
+    startIndex: null,
+    endIndex: null,
+    totalRecords: null,
+    totalPages: null,
+    message: null,
   },
-  reducers: {},
   extraReducers: {
     // ---------- get all ----------
+    [getSuppliers.pending]: (state, { payload }) => {
+      state.isLoading = true
+    },
     [getSuppliers.fulfilled]: (state, { payload }) => {
-      state.data = payload
+      state.suppliers = payload.data
+      state.startIndex = payload.startIndex
+      state.endIndex = payload.endIndex
+      state.totalRecords = payload.totalRecords
+      state.totalPages = payload.totalPages
+      state.isLoading = false
+    },
+    [getSuppliers.rejected]: (state, { payload }) => {
+      state.error = payload.message
     },
 
     // ---------- detail ----------
     [getSupplier.pending]: (state) => {
-      state.detail = ''
+      state.supplier = null
     },
     [getSupplier.fulfilled]: (state, { payload }) => {
-      state.detail = payload
+      state.supplier = payload
+    },
+    [getSupplier.rejected]: (state, { payload }) => {
+      state.error = payload.message
     },
 
     // ---------- crate ----------
     [createSupplier.fulfilled]: (state, { payload }) => {
-      state.data = [...state.data, payload]
+      state.message = null
+    },
+    [createSupplier.fulfilled]: (state, { payload }) => {
+      state.message = payload.message
+    },
+    [createSupplier.rejected]: (state, { payload }) => {
+      state.error = payload.message
     },
 
     // ---------- edit ----------
     [editSupplier.pending]: (state) => {
-      state.detail = ''
+      state.supplier = null
     },
     [editSupplier.fulfilled]: (state, { payload }) => {
-      state.detail = payload
+      state.supplier = payload
+    },
+    [editSupplier.rejected]: (state, { payload }) => {
+      state.error = payload.message
     },
 
     // ---------- update ----------
     [updateSupplier.fulfilled]: (state, { payload }) => {
-      state.detail = payload
+      state.message = payload.message
+    },
+    [updateSupplier.rejected]: (state, { payload }) => {
+      state.error = payload.message
     },
 
     // ---------- delete ----------
     [deleteSupplier.fulfilled]: (state, { payload: id }) => {
-      state.data = state.data.filter((item) => item.id !== id)
+      state.suppliers = state.suppliers.filter((item) => item.id !== id)
+    },
+    [deleteSupplier.rejected]: (state, { payload }) => {
+      state.error = payload.message
     },
   },
 })

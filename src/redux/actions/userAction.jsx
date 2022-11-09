@@ -5,23 +5,10 @@ import { clientAPI as api } from '../../services/clientAPI'
 
 const ROUTE = '/user'
 
-// get all search product data
-export const searchUsers = createAsyncThunk(
-  'user/searchUsers',
-  async (name, { rejectWithValue }) => {
-    try {
-      const { data } = await api.get(ROUTE + `/search?name=${name}`)
-      return data
-    } catch (err) {
-      return rejectWithValue(err.response.data)
-    }
-  }
-)
-
 // get all user data
-export const getUsers = createAsyncThunk('user/getUsers', async (arg, { rejectWithValue }) => {
+export const getUsers = createAsyncThunk('user/getUsers', async (args, { rejectWithValue }) => {
   try {
-    const { data } = await api.get(ROUTE)
+    const { data } = await api.get(args ? ROUTE + args : ROUTE)
     return data
   } catch (err) {
     return rejectWithValue(err.response.data)
@@ -61,10 +48,9 @@ export const editUser = createAsyncThunk('user/editUser', async (id, { rejectWit
 // update user data by id
 export const updateUser = createAsyncThunk(
   'user/updateUser',
-  async ({ id, body, navigate }, { rejectWithValue }) => {
+  async ({ id, body }, { rejectWithValue }) => {
     try {
       const { data } = await api.patch(ROUTE + `/${id}/update`, body)
-      navigate(`/dashboard/user/@${data.username}`)
       return data
     } catch (err) {
       return rejectWithValue(err.response.data)

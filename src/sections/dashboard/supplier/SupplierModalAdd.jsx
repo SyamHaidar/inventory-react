@@ -1,15 +1,20 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 // style
 import { Stack, TextField } from '../../../style'
 // redux action
-import { createSupplier } from '../../../redux/actions/supplierAction'
+import {
+  createSupplier,
+  editSupplier,
+  getSuppliers,
+  updateSupplier,
+} from '../../../redux/actions/supplierAction'
 // component
 import { FormModalAdd } from '../../../components'
 
 // ----------------------------------------------------------------------
 
-export default function SupplierModalAdd({ open, isOpen }) {
+export default function SupplierModalAdd({ id, open, isOpen, isEdit }) {
   const dispatch = useDispatch()
 
   const initState = { name: '', location: '', address: '', mobile: '' }
@@ -28,13 +33,35 @@ export default function SupplierModalAdd({ open, isOpen }) {
   }
 
   // handle submit form
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    dispatch(createSupplier(body))
+    if (!isEdit) {
+      await dispatch(createSupplier(body))
+    } else {
+      await dispatch(updateSupplier({ id, body }))
+    }
+    await dispatch(getSuppliers())
     // clear state & close modal
     setBody(initState)
     isOpen()
   }
+
+  const fetchSupplier = async () => {
+    const { payload } = await dispatch(editSupplier(id))
+    setBody({
+      name: payload.name,
+      location: payload.location,
+      address: payload.address,
+      mobile: payload.mobile,
+    })
+  }
+
+  useEffect(() => {
+    if (isEdit) {
+      fetchSupplier()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEdit])
 
   // input form field with onChnage validation
   const FORM_FIELD = [

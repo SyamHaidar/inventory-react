@@ -16,13 +16,13 @@ const container = document.getElementById('root')
 const root = createRoot(container)
 
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <HelmetProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </HelmetProvider>
-    </Provider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <Provider store={store}>
+    <HelmetProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </HelmetProvider>
+  </Provider>
+  // </React.StrictMode>
 )

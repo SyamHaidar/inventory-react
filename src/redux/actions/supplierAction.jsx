@@ -8,9 +8,9 @@ const ROUTE = '/supplier'
 // get all supplier data
 export const getSuppliers = createAsyncThunk(
   'supplier/getSuppliers',
-  async (arg, { rejectWithValue }) => {
+  async (args, { rejectWithValue }) => {
     try {
-      const { data } = await api.get(ROUTE)
+      const { data } = await api.get(args ? ROUTE + args : ROUTE)
       return data
     } catch (err) {
       return rejectWithValue(err.response.data)
@@ -60,10 +60,9 @@ export const editSupplier = createAsyncThunk(
 // update supplier data by id
 export const updateSupplier = createAsyncThunk(
   'supplier/updateSupplier',
-  async ({ id, body, navigate }, { rejectWithValue }) => {
+  async ({ id, body }, { rejectWithValue }) => {
     try {
       const { data } = await api.patch(ROUTE + `/${id}/update`, body)
-      navigate(`/dashboard/supplier/${data.name.replace(/\s+/g, '').toLowerCase()}`)
       return data
     } catch (err) {
       return rejectWithValue(err.response.data)

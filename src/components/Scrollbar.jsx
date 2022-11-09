@@ -1,5 +1,5 @@
 import SimpleBarReact from 'simplebar-react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 // style
 import { Box, theme } from '../style'
 
@@ -14,16 +14,25 @@ const SimpleBar = styled(SimpleBarReact)`
     }
 
     &.simplebar-visible::before {
-      opacity: 1;
+      opacity: 0.5;
     }
+
+    ${(props) =>
+      props.$hide &&
+      css`
+        &::-webkit-scrollbar {
+          height: 0;
+          width: 0;
+        }
+      `}
   }
 
   & .simplebar-track.simplebar-vertical {
-    width: 8;
+    width: 6;
   }
 
   & .simplebar-track.simplebar-horizontal .simplebar-scrollbar {
-    height: 8;
+    height: 6;
   }
 
   & .simplebar-mask {
@@ -35,7 +44,7 @@ const SimpleBar = styled(SimpleBarReact)`
 
 // ----------------------------------------------------------------------
 
-export default function Scrollbar({ children, sx, ...other }) {
+export default function Scrollbar({ children, sx, hide = false, ...other }) {
   // const userAgent = typeof navigator === 'undefined' ? 'SSR' : navigator.userAgent
 
   // const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)
@@ -46,7 +55,7 @@ export default function Scrollbar({ children, sx, ...other }) {
 
   return (
     <Box sx={{ flexGrow: 1, height: '100%', overflow: 'hidden' }}>
-      <SimpleBar timeout={500} clickOnTrack={false} $sx={sx} {...other}>
+      <SimpleBar timeout={300} clickOnTrack={false} $sx={sx} $hide={hide} {...other}>
         {children}
       </SimpleBar>
     </Box>
